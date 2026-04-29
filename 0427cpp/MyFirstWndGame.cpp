@@ -142,6 +142,25 @@ void MyFirstWndGame::CreatePlayer()
 
 void MyFirstWndGame::CreateEnemy()
 {
+    // 모르고 만든 ver. 1
+    //
+    //int i = 0;
+    //while (++i < MAX_GAME_OBJECT_COUNT)
+    //{
+    //    if (nullptr != m_GameObjectPtrTable[i])
+    //    {
+    //        Vector2f pos = m_GameObjectPtrTable[i]->GetPosition();
+    //        // Distance <= Radius * 2... 제곱근 생략
+    //        if ((m_EnemySpawnPos.x - pos.x) * (m_EnemySpawnPos.x - pos.x) + (m_EnemySpawnPos.y - pos.y) * (m_EnemySpawnPos.y - pos.y) <= (50.0f * 2) * (50.0f * 2))
+    //        {
+    //            m_EnemySpawnPos = { 0, 0 };     // 생성 안해!
+    //            return;
+    //        }
+    //    }
+    //}
+    // 
+    // TODO: GameObject에 게터 만들기?
+
     GameObject* pNewObject = new GameObject(ObjectType::ENEMY);
 
     pNewObject->SetName("Enemy");
@@ -159,6 +178,13 @@ void MyFirstWndGame::CreateEnemy()
     int i = 0;
     while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
     {
+        // 이거 추가
+        if (learning::Intersect(*(pNewObject->m_pColliderCircle), *(dynamic_cast<GameObject*>(m_GameObjectPtrTable[i])->m_pColliderCircle)))
+        {
+            m_EnemySpawnPos = { 0, 0 };
+            delete pNewObject;
+            return;
+        }
         if (nullptr == m_GameObjectPtrTable[i])
         {
             m_GameObjectPtrTable[i] = pNewObject;

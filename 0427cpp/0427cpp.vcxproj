@@ -123,7 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Colider.cpp" />
+    <ClCompile Include="Collider.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -132,7 +132,7 @@
     <ClCompile Include="Utillity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Colider.h" />
+    <ClInclude Include="Collider.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
     <ClInclude Include="INC_Windows.h" />
