@@ -83,6 +83,8 @@ public:
     void SetColliderCircle(float radius);
     void SetColliderBox(float halfWidth, float halfHeight);
 
+    void SetColor(int r = 255, int g = 0, int b = 0);
+
     // Collider
     ColliderCircle* m_pColliderCircle = nullptr;
     ColliderBox* m_pColliderBox = nullptr;
@@ -91,4 +93,8 @@ protected:
     void DrawCollider(HDC hdc);
 
     void Move(float deltaTime);
+
+    int m_r;
+    int m_g;
+    int m_b;
 };

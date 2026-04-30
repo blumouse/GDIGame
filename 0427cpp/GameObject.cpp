@@ -74,11 +74,18 @@ void GameObject::SetColliderBox(float width, float height)
     m_pColliderBox->halfSize.y = height / 2.0f;
 }
 
+void GameObject::SetColor(int r, int g, int b) {
+    m_r = r;
+    m_g = g;
+    m_b = b;
+}
+
 // 과제: 해당 코드의 문제는 무엇일까요? 어떻게 개선하면 좋을까요?
 // 개선 방향에 대해 서로 토론하고 비교해 보세요.
 void GameObject::DrawCollider(HDC hdc)
 {
-    HPEN hPen = CreatePen(PS_SOLID, 2, RGB(255, 0, 0));
+    // 이거 수정
+    HPEN hPen = CreatePen(PS_SOLID, 2, RGB(m_r, m_g, m_b));
     HPEN hOldPen = (HPEN)SelectObject(hdc, hPen);
     HBRUSH hOldBrush = (HBRUSH)SelectObject(hdc, GetStockObject(NULL_BRUSH));
 

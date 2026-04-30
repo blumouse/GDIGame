@@ -109,6 +109,43 @@ void MyFirstWndGame::FixedUpdate()
     {
         CreateEnemy();
     }
+
+    // 이거 추가
+    GameObject* p = GetPlayer();
+    GameObject* e;
+
+    assert(p != nullptr);
+
+    int i = 0;
+    bool isDirty = false;
+    while (++i < MAX_GAME_OBJECT_COUNT)
+    {
+        e = GetEnemy(i);
+        if (nullptr == e)
+            break;
+
+        if (learning::Intersect(*(p->m_pColliderCircle), *(e->m_pColliderCircle)))
+        {
+            // 컬러를 파란색으로 설정!
+            p->SetColor(0, 0, 255);
+            e->SetColor(0, 0, 255);
+            isDirty = true;
+        }
+    }
+
+    if (!isDirty)   // 충돌이 없었다면
+    {
+        i = 0;
+        p->SetColor();
+
+        while (++i < MAX_GAME_OBJECT_COUNT) {
+            e = GetEnemy(i);
+            if (nullptr == e)
+                break;
+
+            e->SetColor();
+        }
+    }
 }
 
 void MyFirstWndGame::LogicUpdate()
@@ -134,6 +171,7 @@ void MyFirstWndGame::CreatePlayer()
     pNewObject->SetName("Player");
     pNewObject->SetPosition(0.0f, 0.0f); // 일단, 임의로 설정 
     pNewObject->SetSpeed(1.0f); // 일단, 임의로 설정   
+    pNewObject->SetColor();    // 이거 추가
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
@@ -142,25 +180,6 @@ void MyFirstWndGame::CreatePlayer()
 
 void MyFirstWndGame::CreateEnemy()
 {
-    // 모르고 만든 ver. 1
-    //
-    //int i = 0;
-    //while (++i < MAX_GAME_OBJECT_COUNT)
-    //{
-    //    if (nullptr != m_GameObjectPtrTable[i])
-    //    {
-    //        Vector2f pos = m_GameObjectPtrTable[i]->GetPosition();
-    //        // Distance <= Radius * 2... 제곱근 생략
-    //        if ((m_EnemySpawnPos.x - pos.x) * (m_EnemySpawnPos.x - pos.x) + (m_EnemySpawnPos.y - pos.y) * (m_EnemySpawnPos.y - pos.y) <= (50.0f * 2) * (50.0f * 2))
-    //        {
-    //            m_EnemySpawnPos = { 0, 0 };     // 생성 안해!
-    //            return;
-    //        }
-    //    }
-    //}
-    // 
-    // TODO: GameObject에 게터 만들기?
-
     GameObject* pNewObject = new GameObject(ObjectType::ENEMY);
 
     pNewObject->SetName("Enemy");
@@ -174,18 +193,22 @@ void MyFirstWndGame::CreateEnemy()
     pNewObject->SetSpeed(1.0f); // 일단, 임의로 설정   
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
+    pNewObject->SetColor();
 
     int i = 0;
     while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
     {
         // 이거 추가
-        if (learning::Intersect(*(pNewObject->m_pColliderCircle), *(dynamic_cast<GameObject*>(m_GameObjectPtrTable[i])->m_pColliderCircle)))
+        if (nullptr != m_GameObjectPtrTable[i])
         {
-            m_EnemySpawnPos = { 0, 0 };
-            delete pNewObject;
-            return;
+            if (learning::Intersect(*(pNewObject->m_pColliderCircle), *(GetEnemy(i)->m_pColliderCircle)))
+            {
+                m_EnemySpawnPos = { 0, 0 };
+                delete pNewObject;
+                return;
+            }
         }
-        if (nullptr == m_GameObjectPtrTable[i])
+        else if (nullptr == m_GameObjectPtrTable[i])
         {
             m_GameObjectPtrTable[i] = pNewObject;
             break;
