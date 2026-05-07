@@ -9,6 +9,11 @@ namespace learning
     struct ColliderBox;
 }
 
+namespace renderHelp
+{
+    class BitmapInfo;
+}
+
 enum class ObjectType
 {
     PLAYER,
@@ -48,6 +53,9 @@ public:
 
     float GetSpeed() const { return m_speed; }
 
+    void SetWidth(int width) { m_width = width; }
+    void SetHeight(int height) { m_height = height; }
+
 protected:
 
     void Move(float deltaTime)
@@ -62,6 +70,9 @@ protected:
     Vector2f m_pos = { 0.0f, 0.0f };
     Vector2f m_dir = { 0.0f, 0.0f }; // 방향 (단위 벡터)
 
+    int m_width;
+    int m_height;
+
     float m_speed = 0.0f; // 속력
 
     char m_name[OBJECT_NAME_LEN_MAX] = "";
@@ -71,6 +82,7 @@ class GameObject : public GameObjectBase
 {
     using ColliderCircle = learning::ColliderCircle;
     using ColliderBox = learning::ColliderBox;
+    using BitmapInfo = renderHelp::BitmapInfo;
 
 public:
     GameObject(const GameObject&) = delete;
@@ -85,11 +97,36 @@ public:
 
     void SetColor(int r = 255, int g = 0, int b = 0);
 
+    void SetBitmapInfo(BitmapInfo* bitmapInfo);
+
     // Collider
     ColliderCircle* m_pColliderCircle = nullptr;
     ColliderBox* m_pColliderBox = nullptr;
 
 protected:
+
+    void DrawBitmap(HDC hdc);
+    void UpdateFrame(float deltaTime);
+
+    // Bitmap 정보
+    BitmapInfo* m_pBitmapInfo = nullptr;
+
+    // 점진적으로 예쁘게 고쳐 보아요.
+    struct FrameFPos
+    {
+        int x;
+        int y;
+    };
+    // 프레임 정보: 왜 14개냐고 물으시면 셌다고 밖에...:)
+    FrameFPos m_frameXY[14] = { { 0, 0 }, };
+    int m_frameWidth = 0;
+    int m_frameHeight = 0;
+    int m_frameIndex = 0;
+    int m_frameCount = 14; // 프레임 수
+
+    float m_frameTime = 0.0f;
+    float m_frameDuration = 100.0f; // 임의 설정
+
     void DrawCollider(HDC hdc);
 
     void Move(float deltaTime);

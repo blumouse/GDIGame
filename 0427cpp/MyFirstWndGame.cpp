@@ -5,6 +5,7 @@
 #include <iostream>
 #include <assert.h>
 #include "NzWndBase.h"
+#include "RenderHelp.h"
 
 using namespace learning;
 
@@ -16,7 +17,7 @@ bool MyFirstWndGame::Initialize()
     m_pGameTimer->Reset();
 
     const wchar_t* className = L"MyFirstWndGame";
-    const wchar_t* windowName = L"MyFirstWndGame";
+    const wchar_t* windowName = L"새가날아든다";
 
     if (false == __super::Create(className, windowName, 1024, 720))
     {
@@ -41,6 +42,12 @@ bool MyFirstWndGame::Initialize()
     {
         m_GameObjectPtrTable[i] = nullptr;
     }
+
+#pragma region resource
+    m_pPlayerBitmapInfo = renderHelp::CreateBitmapInfo(L"./Resource/redbird.png");
+    m_pEnemyBitmapInfo = renderHelp::CreateBitmapInfo(L"./Resource/graybird.png");
+
+#pragma endregion
 
     // [CHECK]. 첫 번째 게임 오브젝트는 플레이어 캐릭터로 고정!
     CreatePlayer();
@@ -175,6 +182,11 @@ void MyFirstWndGame::CreatePlayer()
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
 
+    pNewObject->SetBitmapInfo(m_pPlayerBitmapInfo);
+
+    pNewObject->SetWidth(100);
+    pNewObject->SetHeight(100);
+
     m_GameObjectPtrTable[0] = pNewObject;
 }
 
@@ -194,6 +206,11 @@ void MyFirstWndGame::CreateEnemy()
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
     pNewObject->SetColor();
+
+    pNewObject->SetBitmapInfo(m_pEnemyBitmapInfo);
+
+    pNewObject->SetWidth(100);
+    pNewObject->SetHeight(100);
 
     int i = 0;
     while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!

@@ -7,8 +7,15 @@ class GameTimer;
 class GameObjectBase;
 class GameObject;
 
+namespace renderHelp
+{
+    class BitmapInfo;
+}
+
 class MyFirstWndGame : public NzWndBase
 {
+    using BitmapInfo = renderHelp::BitmapInfo;
+
 public:
     MyFirstWndGame() = default;
     ~MyFirstWndGame() override = default;
@@ -70,5 +77,7 @@ private:
     MOUSE_POS m_PlayerTargetPos = { 0, 0 };
     MOUSE_POS m_EnemySpawnPos = { 0, 0 };
 
+    BitmapInfo* m_pPlayerBitmapInfo = nullptr;
 
+    BitmapInfo* m_pEnemyBitmapInfo = nullptr;
 };
