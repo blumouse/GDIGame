@@ -38,15 +38,6 @@ private:
     void FixedUpdate();
     void LogicUpdate();
 
-    void CreatePlayer();
-    void CreateEnemy();
-
-    void UpdatePlayerInfo();
-    void UpdateEnemyInfo(int i);
-
-    GameObject* GetPlayer() const { return (GameObject*)m_GameObjectPtrTable[0]; }
-    GameObject* GetEnemy(int i) const { return (GameObject*)m_GameObjectPtrTable[i]; }
-
 private:
     HDC m_hFrontDC = nullptr;
     HDC m_hBackDC = nullptr;
