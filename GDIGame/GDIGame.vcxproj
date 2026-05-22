@@ -135,11 +135,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h" />
+    <ClInclude Include="Component.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="GameManager.h" />
+    <ClInclude Include="GameManagerObject.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="IDrawable.h" />
     <ClInclude Include="INC_Windows.h" />
     <ClInclude Include="MyFirstWndGame.h" />
     <ClInclude Include="NzWndBase.h" />
+    <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelObject.h" />
     <ClInclude Include="RenderHelp.h" />
     <ClInclude Include="Utillity.h" />
   </ItemGroup>

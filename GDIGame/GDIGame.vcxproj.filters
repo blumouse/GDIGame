@@ -13,56 +13,83 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="헤더 파일\Origin">
+      <UniqueIdentifier>{cd75082a-fcc7-46c2-b05a-e3b9caf4ca5f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Origin">
+      <UniqueIdentifier>{dc687647-2d5b-4cfc-8797-4a988fb8f631}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Collider.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Origin</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="MyFirstWndGame.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="NzWndBase.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Utillity.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Origin</Filter>
     </ClCompile>
     <ClCompile Include="GameTimer.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Origin</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>소스 파일\Origin</Filter>
+    </ClCompile>
+    <ClCompile Include="MyFirstWndGame.cpp">
+      <Filter>소스 파일\Origin</Filter>
+    </ClCompile>
+    <ClCompile Include="NzWndBase.cpp">
+      <Filter>소스 파일\Origin</Filter>
     </ClCompile>
     <ClCompile Include="RenderHelp.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Origin</Filter>
+    </ClCompile>
+    <ClCompile Include="Utillity.cpp">
+      <Filter>소스 파일\Origin</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collider.h">
+    <ClInclude Include="Game.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Collider.h">
+      <Filter>헤더 파일\Origin</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="MyFirstWndGame.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="NzWndBase.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="Utillity.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Origin</Filter>
     </ClInclude>
     <ClInclude Include="GameTimer.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Origin</Filter>
     </ClInclude>
     <ClInclude Include="INC_Windows.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Origin</Filter>
+    </ClInclude>
+    <ClInclude Include="MyFirstWndGame.h">
+      <Filter>헤더 파일\Origin</Filter>
+    </ClInclude>
+    <ClInclude Include="NzWndBase.h">
+      <Filter>헤더 파일\Origin</Filter>
     </ClInclude>
     <ClInclude Include="RenderHelp.h">
+      <Filter>헤더 파일\Origin</Filter>
+    </ClInclude>
+    <ClInclude Include="Utillity.h">
+      <Filter>헤더 파일\Origin</Filter>
+    </ClInclude>
+    <ClInclude Include="Component.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="IDrawable.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManagerObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelObject.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManager.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
