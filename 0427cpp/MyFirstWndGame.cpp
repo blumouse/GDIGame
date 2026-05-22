@@ -118,52 +118,66 @@ void MyFirstWndGame::FixedUpdate()
     }
 
     // 이거 추가
-    GameObject* p = GetPlayer();
-    GameObject* e;
+    // 이제 그냥 다 검사하게 수정
+    GameObject* go_1;
+    GameObject* go_2;
 
-    assert(p != nullptr);
-
-    int i = 0;
-    bool isDirty = false;
-    while (++i < MAX_GAME_OBJECT_COUNT)
-    {
-        e = GetEnemy(i);
-        if (nullptr == e)
+    // 강력하게 초기화해버리자
+    int i = -1;
+    while (++i < MAX_GAME_OBJECT_COUNT) {
+        go_1 = GetEnemy(i);
+        if (nullptr == go_1)
             break;
 
-        if (learning::Intersect(*(p->m_pColliderCircle), *(e->m_pColliderCircle)))
-        {
-            // 컬러를 파란색으로 설정!
-            p->SetColor(0, 0, 255);
-            e->SetColor(0, 0, 255);
-            isDirty = true;
-        }
+        go_1->SetColor();
+        go_1->isIntersect = false;
+        for (int j = 0; j < go_1->IntersectColliders_index; j++)
+            go_1->intersectColliders[j] = nullptr;
+        go_1->IntersectColliders_index = 0;
     }
 
-    if (!isDirty)   // 충돌이 없었다면
+    i = -1;
+    while (++i < MAX_GAME_OBJECT_COUNT)
     {
-        i = 0;
-        p->SetColor();
+        go_1 = GetEnemy(i);     // 플레이어도 받아올수 있다..
+        if (nullptr == go_1)
+            break;
 
-        while (++i < MAX_GAME_OBJECT_COUNT) {
-            e = GetEnemy(i);
-            if (nullptr == e)
+        for (int j = i + 1; j < MAX_GAME_OBJECT_COUNT; j++)
+        {
+            go_2 = GetEnemy(j);
+            if (nullptr == go_2)
                 break;
 
-            e->SetColor();
+            if (learning::Intersect(*(go_1->m_pColliderCircle), *(go_2->m_pColliderCircle)))
+            {
+                // 컬러를 파란색으로 설정!
+                go_1->SetColor(0, 0, 255);
+                go_2->SetColor(0, 0, 255);
+
+                // 플래그도 추가
+                go_1->isIntersect = true;
+                go_2->isIntersect = true;
+
+                // 콜리전 정보도 추가
+                go_1->intersectColliders[go_1->IntersectColliders_index++] = go_2;
+                go_2->intersectColliders[go_2->IntersectColliders_index++] = go_1;
+            }
         }
     }
 }
 
 void MyFirstWndGame::LogicUpdate()
 {
-
     UpdatePlayerInfo();
 
     for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
         if (m_GameObjectPtrTable[i])
         {
+            if (i != 0)
+                UpdateEnemyInfo(i);
+
             m_GameObjectPtrTable[i]->Update(m_fDeltaTime);
         }
     }
@@ -187,6 +201,8 @@ void MyFirstWndGame::CreatePlayer()
     pNewObject->SetWidth(100);
     pNewObject->SetHeight(100);
 
+    pNewObject->intersectColliders = new GameObject* [MAX_GAME_OBJECT_COUNT];
+
     m_GameObjectPtrTable[0] = pNewObject;
 }
 
@@ -202,7 +218,7 @@ void MyFirstWndGame::CreateEnemy()
     m_EnemySpawnPos = { 0, 0 };
 
     pNewObject->SetPosition(x, y);
-    pNewObject->SetSpeed(1.0f); // 일단, 임의로 설정   
+    pNewObject->SetSpeed(0.5f); // 너무 빨라
 
     pNewObject->SetColliderCircle(50.0f); // 일단, 임의로 설정. 오브젝트 설정할 거 다 하고 나서 하자.
     pNewObject->SetColor();
@@ -211,6 +227,8 @@ void MyFirstWndGame::CreateEnemy()
 
     pNewObject->SetWidth(100);
     pNewObject->SetHeight(100);
+
+    pNewObject->intersectColliders = new GameObject* [MAX_GAME_OBJECT_COUNT];
 
     int i = 0;
     while (++i < MAX_GAME_OBJECT_COUNT) //0번째는 언제나 플레이어!
@@ -252,14 +270,92 @@ void MyFirstWndGame::UpdatePlayerInfo()
     Vector2f playerDir = mousePos - playerPos;
     float distance = playerDir.Length(); // 거리 계산
 
-    if (distance > 50.f) //임의로 설정한 거리
+    // 진행방향에 적이 있으면 못가게 하고싶다!
+    playerDir.Normalize(); // 정규화
+    pPlayer->SetDirection(playerDir); // 플레이어 방향 설정
+
+    if (distance > 50.f && !pPlayer->isIntersect)
     {
-        playerDir.Normalize(); // 정규화
-        pPlayer->SetDirection(playerDir); // 플레이어 방향 설정
+        // 예의상 넣어줘야한다
+    }
+    else if (distance > 50.f && pPlayer->isIntersect) //임의로 설정한 거리
+    {
+        GameObject* go = nullptr;
+        bool isMoveable = true;
+
+        Vector2f enemyPos;
+        Vector2f enemyDir;
+
+        for (int i = 0; i < pPlayer->IntersectColliders_index; i++)
+        {
+            go = pPlayer->intersectColliders[i];
+            if (go == nullptr)
+                break;
+
+            // 벡터로 어쩌구해서 반대방향일때만 이동가능~
+            enemyPos = go->GetPosition();
+            enemyDir = enemyPos - playerPos;
+            enemyDir.Normalize();
+
+            // 대강 90도보다 커야한다
+            if (playerDir.Dot(enemyDir) > 0.25f)    // 인간미
+                isMoveable = false;
+        }
+
+        if (!isMoveable)
+        {
+            pPlayer->SetDirection(Vector2f(0, 0));
+            m_PlayerTargetPos.x = playerPos.x;
+            m_PlayerTargetPos.y = playerPos.y;
+        }
     }
     else
     {
         pPlayer->SetDirection(Vector2f(0, 0)); // 플레이어 정지
+    }
+}
+
+void MyFirstWndGame::UpdateEnemyInfo(int i) {
+    GameObject* pEnemy = GetEnemy(i);
+    static GameObject* pPlayer = GetPlayer();
+
+    assert(pEnemy != nullptr);
+
+    Vector2f playerPos = pPlayer->GetPosition();
+    Vector2f enemyPos = pEnemy->GetPosition();
+
+    Vector2f enemyDir = playerPos - enemyPos;
+
+    enemyDir.Normalize();
+    pEnemy->SetDirection(enemyDir);
+
+    // 플래그를 이용하자
+    if (pEnemy->isIntersect)
+    {
+        GameObject* go = nullptr;
+        bool isMoveable = true;
+
+        Vector2f otherPos;
+        Vector2f otherDir;
+
+        for (int i = 0; i < pEnemy->IntersectColliders_index; i++)
+        {
+            go = pEnemy->intersectColliders[i];
+            if (go == nullptr)
+                break;
+
+            otherPos = go->GetPosition();
+            otherDir = otherPos - enemyPos;
+            otherDir.Normalize();
+
+            if (enemyDir.Dot(otherDir) > 0.25f)
+                isMoveable = false;
+        }
+
+        if (!isMoveable)
+        {
+            pEnemy->SetDirection(Vector2f(0, 0));
+        }
     }
 }
 
@@ -272,10 +368,10 @@ void MyFirstWndGame::Update()
     m_fDeltaTime = m_pGameTimer->DeltaTimeMS();
     m_fFrameCount += m_fDeltaTime;
 
-    while (m_fFrameCount >= 200.0f)
+    while (m_fFrameCount >= 20.0f)      // 너무 가끔 호출해서 너무 뚫고 들어가자나
     {
         FixedUpdate();
-        m_fFrameCount -= 200.0f;
+        m_fFrameCount -= 20.0f;
     }
 }
 

@@ -103,6 +103,11 @@ public:
     ColliderCircle* m_pColliderCircle = nullptr;
     ColliderBox* m_pColliderBox = nullptr;
 
+    bool isIntersect = false;
+
+    GameObject** intersectColliders = nullptr;
+    int IntersectColliders_index = 0;
+
 protected:
 
     void DrawBitmap(HDC hdc);

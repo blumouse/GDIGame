@@ -18,6 +18,12 @@ GameObject::~GameObject()
         delete m_pColliderBox;
         m_pColliderBox = nullptr;
     }
+
+    if (intersectColliders)
+    {
+        delete[] intersectColliders;
+        intersectColliders = nullptr;
+    }
 }
 
 void GameObject::SetBitmapInfo(BitmapInfo* bitmapInfo)
