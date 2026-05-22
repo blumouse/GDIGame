@@ -21,9 +21,10 @@
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>
-    <ProjectGuid>{cf3511b0-d0f9-48e1-b7c0-877a2e7369f5}</ProjectGuid>
-    <RootNamespace>My0427cpp</RootNamespace>
+    <ProjectGuid>{50A3ED9A-6FE6-4F22-B904-4A73B6E39AEF}</ProjectGuid>
+    <RootNamespace>MyGDIGame</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>GDIGame</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
