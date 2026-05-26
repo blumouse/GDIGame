@@ -1,16 +1,11 @@
 #pragma once
 
-#include "Transform.h"
-
 class IClickable
 {
 public:
     virtual ~IClickable() = default;
 
-public:
-    virtual Transform* GetTransform() const = 0;
 
-public:
     virtual void OnMouseEnter() = 0;
     virtual void OnMouseExit() = 0;
 

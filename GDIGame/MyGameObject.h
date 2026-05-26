@@ -39,7 +39,7 @@ public:
     GameObjectBase();
     GameObjectBase(const GameObjectBase&) = delete;
 
-    virtual ~GameObjectBase() = default;
+    virtual ~GameObjectBase();
 
     Component** GetComponents() const { return ppComponents; }
     int GetComponentsSize() const { return componentsSize; }
@@ -49,6 +49,8 @@ public:
     virtual void Start();
     virtual void Update(float deltaTime);
     virtual void FixedUpdate();
+
+    virtual void OnDestroy();
 
 
     // 다 필요없지 않나..?

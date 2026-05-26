@@ -7,7 +7,7 @@ GameManagerObject::GameManagerObject()
 {
 	// 컴포넌트 만들어 넣기
 
-	pGameManager = new GameManager();
+	pGameManager = new GameManager(this);
 
 	ppComponents[componentsSize++] = pGameManager;
 }

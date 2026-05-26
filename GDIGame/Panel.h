@@ -3,7 +3,7 @@
 #include "Component.h"
 #include "IClickable.h"
 
-class Panel : public IClickable
+class Panel : public Component, IClickable
 {
     friend class GameManager;
 
@@ -26,10 +26,22 @@ private:
     int surroundingMine;
 
 public:
-    Panel();
-    ~Panel();
+    Panel() = delete;
+    Panel(GameObjectBase* gameObject);
+
+    ~Panel() override;
 
     void InitPanel();
+
+
+    // Component (Lifecycles)
+    void Awake() override;
+    void Start() override;
+    void Update(float deltaTime) override;
+    void FixedUpdate() override;
+
+    void OnDestroy() override;
+
 
     // Clickable    
     void OnMouseEnter() override;
@@ -42,6 +54,7 @@ public:
     void OnRDown() override;
     void OnRComplete() override;
     void OnRCancel() override;
+
 
 private:
     void OpenPanel();

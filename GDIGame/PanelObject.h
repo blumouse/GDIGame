@@ -17,23 +17,28 @@ private:
     PanelBitmap* pPanelBitmap = nullptr;
 
 public:
-    PanelObject() = default;
+    PanelObject();
     PanelObject(const PanelObject&) = delete;
+
     ~PanelObject() override;
 
     Panel* GetPanel() const { return pPanel; }
     PanelBitmap* GetPanelBitmap() const { return pPanelBitmap; }
 
 
+    // GameObjectBase (Lifecycles)
     void Awake() override;
     void Start() override;
     void Update(float deltaTime) override;
     void FixedUpdate() override;
 
-    //void Render(HDC hdc) override;
+    void OnDestroy() override;
 
 
+    // IDrawable
     void Draw(HDC hdc) override;
 
 
+    // Transform
+    bool IsIntersect(int x, int y) override;
 };

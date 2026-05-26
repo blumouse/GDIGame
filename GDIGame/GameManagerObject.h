@@ -14,18 +14,20 @@ private:
     GameManager* pGameManager = nullptr;
 
 public:
-    GameManagerObject() = default;
+    GameManagerObject();
     GameManagerObject(const GameManagerObject&) = delete;
+
     ~GameManagerObject() override;
 
-    GameManager* GetGameManager() const { return pGameManager; }
 
-
+    // GameObjectBase (Lifecycles)
     void Awake() override;
     void Start() override;
     void Update(float deltaTime) override;
     void FixedUpdate() override;
 
+    void OnDestroy() override;
 
-    //void Render(HDC hdc) override;
+
+    GameManager* GetGameManager() const { return pGameManager; }
 };

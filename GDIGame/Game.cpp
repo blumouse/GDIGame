@@ -16,13 +16,19 @@
 
 using namespace learning;
 
-// TODO: 
-// 이니셜라이즈 / 파이널라이즈 / 로드 리소스 만들기
-// 게임 자체도 전역으로 있어야할게 있는거같은데 Game::으로 호출되는것들
-// pch 하나 묶어서 놔둘까?
-
 // 어디부터 만드는게 나을까..?
 // 프레임워크부터 만드는게 낫겠지? 대강 호출순서로 위에부터
+// 0.01% 유니티
+
+// TODO: 
+// pch 하나 묶어서 놔둘까?
+// 이니셜라이즈 / 파이널라이즈 / 로드 리소스 만들기     <- 앞에 두개 된건가? 아직
+// 패널에서 Drawable 구현해보기
+// 게임매니저에서 패널 오브젝트 생성해보기
+
+// 엄 어디까지 된거지 프레임워크..?
+// gmo부분 테스트겸 만들어보면서 또 하니까 좀 헷갈
+// 일단 내부로직 안채우고 흰화면부터 띄워보자
 
 
 constexpr int MAX_GAME_OBJECT_COUNT = 1000;
@@ -69,9 +75,9 @@ bool Game::Initialize()
     m_hDefaultBitmap = (HBITMAP)SelectObject(m_hBackDC, m_hBackBitmap);
 
 
-    ppGameObjects = new GameObjectBase * [MAX_GAME_OBJECT_COUNT];
-    ppDrawables = new IDrawable * [MAX_GAME_OBJECT_COUNT];
-    ppTransforms = new Transform * [MAX_GAME_OBJECT_COUNT];
+    ppGameObjects = new GameObjectBase* [MAX_GAME_OBJECT_COUNT];
+    ppDrawables = new IDrawable* [MAX_GAME_OBJECT_COUNT];
+    ppTransforms = new Transform* [MAX_GAME_OBJECT_COUNT];
 
     for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
@@ -80,24 +86,22 @@ bool Game::Initialize()
         ppTransforms[i] = nullptr;
     }
 
-    gameObjectIndex = 0;    // 인덱스가 1000을 넘으면..? 그냥 생성용으로만 써야하나
-
+    gameObjectsIndex = 0;
 
     // 생성!!
     ClickableManagerObject* cmo = new ClickableManagerObject();
-    cmo->Awake();
-    ppGameObjects[gameObjectIndex++] = cmo;
+    RegisterObject(cmo);
 
     GameManagerObject* gmo = new GameManagerObject();
-    gmo->Awake();   // 여기서 말고 생성자에서 호출해주는게? 응 안돼
-    ppGameObjects[gameObjectIndex++] = gmo;
+    RegisterObject(gmo);
 
     // 패널은 게임매니저에서 생성..!
-    // Awake 내에서 해야겟군
+    // Awake 내에서 일단 해야겟군
 
 
     // 다하고서 Start
     Start();
+    isStarted = true;       // 이후에 생성되는 놈들은 따로 호출해줌
 
 
 
@@ -161,21 +165,11 @@ void Game::Finalize()
     delete pGameTimer;
     pGameTimer = nullptr;
 
-    if (ppTransforms)
-    {
-        // 컴포넌트 들어가서 그것들도 없애주기
-        delete ppTransforms;
-    }
-
-    if (ppDrawables)
-    {
-        delete ppDrawables;
-    }
-
     if (ppGameObjects)
     {
-        for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+        for (int i = 0; i < gameObjectsIndex; ++i)
         {
+            // TODO: 컴포넌트 들어가서 그것들도 없애주기
             if (ppGameObjects[i])
             {
                 delete ppGameObjects[i];
@@ -183,6 +177,19 @@ void Game::Finalize()
             }
         }
         delete ppGameObjects;
+        ppGameObjects = nullptr;
+    }
+
+    if (ppDrawables)
+    {
+        delete ppDrawables;
+        ppDrawables = nullptr;
+    }
+
+    if (ppTransforms)
+    {
+        delete ppTransforms;
+        ppTransforms = nullptr;
     }
 
     __super::Destroy();
@@ -233,18 +240,18 @@ void Game::_Render()
 }
 
 
-void Game::Awake() 
-{
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-    {
-        if (ppGameObjects[i])
-        {
-            ppGameObjects[i]->Awake();
-        }
-        else
-            break;
-    }
-}
+//void Game::Awake() 
+//{
+//    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+//    {
+//        if (ppGameObjects[i])
+//        {
+//            ppGameObjects[i]->Awake();
+//        }
+//        else
+//            break;
+//    }
+//}
 
 
 void Game::Start()
@@ -344,20 +351,45 @@ void Game::OnClose()
 }
 
 
-void Game::LoadResources() 
-{
-
-}
+//void Game::LoadResources() 
+//{
+//
+//}
 
 
 void Game::RegisterObject(GameObjectBase* gameObject)
 {
-    ppGameObjects[gameObjectIndex++] = gameObject;
+    // 효율적인 검색을 위한..
+
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppGameObjects[i] == nullptr)
+        {
+            ppGameObjects[i] = gameObject;
+            gameObject->Awake();
+
+            if (isStarted)
+                gameObject->Start();
+
+            return;
+        }
+    }
+
+
+    if (gameObjectsIndex == MAX_GAME_OBJECT_COUNT)
+        // 안돼
+        return;
+
+    ppGameObjects[gameObjectsIndex++] = gameObject;
+    gameObject->Awake();
+
+    if (isStarted)
+        gameObject->Start();
 }
 
 void Game::RegisterDrawable(IDrawable* drawable)
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; i++)
+    for (int i = 0; i < gameObjectsIndex; i++)
     {
         if (ppDrawables[i] == nullptr)
         {
@@ -369,7 +401,7 @@ void Game::RegisterDrawable(IDrawable* drawable)
 
 void Game::RegisterTransform(Transform* transform)
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; i++)
+    for (int i = 0; i < gameObjectsIndex; i++)
     {
         if (ppTransforms[i] == nullptr)
         {
@@ -380,15 +412,58 @@ void Game::RegisterTransform(Transform* transform)
 }
 
 
-bool Game::TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& goBase)
+void Game::DestroyObject(GameObjectBase* go) 
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; i++)
+    for (int i = 0; i < gameObjectsIndex; i++)
     {
         if (ppTransforms[i])
         {
-            ppTransforms[i]->pos
+            if (ppTransforms[i] == dynamic_cast<Transform*>(go))      // ?? 이거 되나..?
+                ppTransforms[i] = nullptr;              // 그냥 이쪽은 따로 탈퇴시키는게 낫나
+        }
+
+        if (ppDrawables[i])
+        {
+            if (ppDrawables[i] == dynamic_cast<IDrawable*>(go))
+                ppDrawables[i] = nullptr;
+        }
+
+        if (ppGameObjects[i])
+        {
+            if (ppGameObjects[i] == go)
+            {
+                ppGameObjects[i] = nullptr;
+
+                go->OnDestroy();
+                delete go;
+                go = nullptr;
+
+                return;
+            }
+        }
+    }
+
+    // 여기 왔으면.. 너 뭐임
+    assert(go == nullptr);
+}
+
+
+bool Game::TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& goBase)
+{
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppTransforms[i])
+        {
+            if (ppTransforms[i]->IsIntersect(mouseX, mouseY))
+            {
+                // 어 그 주소 go 맞아.. 더 확실하게 보장시킬수 없나 transform에?
+                goBase = dynamic_cast<GameObjectBase*>(ppTransforms[i]);
+                return true;
+            }
         }
         else
             return false;
     }
+
+    return false;
 }

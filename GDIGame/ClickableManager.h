@@ -13,24 +13,36 @@ class ClickableManager : public Component
 private:
     static ClickableManager* instance;
 
-private:
     std::vector<IClickable*> ppClickables;
 
     IClickable* curOver;
     IClickable* interacting;
 
-private:
-    ClickableManager();
-    virtual ~ClickableManager();
+
+public:
+    ClickableManager() = delete;
+    ClickableManager(GameObjectBase* gameObject);
+
+    ~ClickableManager() override;
 
     ClickableManager(const ClickableManager&) = delete;
     ClickableManager& operator=(const ClickableManager&) = delete;
 
-public:
+
     static ClickableManager* GetInstance();
     static void DestroyInstance();
 
-public:
+
+    // Component (Lifecycles)
+    void Awake() override;
+    void Start() override;
+    void Update(float deltaTime) override;
+    void FixedUpdate() override;
+
+    void OnDestroy() override;
+
+
+    // Input Events
     void HandleMouseMove(int mouseX, int mouseY);
 
     void HandleLDown(int mouseX, int mouseY);
@@ -39,6 +51,6 @@ public:
     void HandleRDown(int mouseX, int mouseY);
     void HandleRUp(int mouseX, int mouseY);
 
-private:
+
     IClickable* TryGetClickable(GameObjectBase* pObject);
 };

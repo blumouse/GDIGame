@@ -19,13 +19,27 @@ private:
 
 
 public:
-    GameManager();
-    ~GameManager();
+    GameManager() = delete;
+    GameManager(GameObjectBase* gameObject);
+
+    ~GameManager() override;
 
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
 
 
+    // Component (Lifecycles)
+    void Awake() override;
+    void Start() override;
+    void Update(float deltaTime) override;
+    void FixedUpdate() override;
+
+    void OnDestroy() override;
+
+
+    // Own Logic
+
+    // Singleton
     static GameManager* GetInstance();
     static void DestroyInstance();
 

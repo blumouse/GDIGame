@@ -20,7 +20,7 @@ private:
     static Game* instance;
 
     GameObjectBase** ppGameObjects = nullptr;
-    int gameObjectIndex;
+    int gameObjectsIndex = 0;
     IDrawable** ppDrawables = nullptr;
     Transform** ppTransforms = nullptr;
 
@@ -28,6 +28,7 @@ private:
     float fDeltaTime = 0.0f;
     float fFrameCount = 0.0f;
 
+    // 이건 걍 좀 강력하게 쓸까
     BitmapInfo** ppBitmapResources = nullptr;
 
 
@@ -53,6 +54,8 @@ public:
     void RegisterDrawable(IDrawable* drawable);
     void RegisterTransform(Transform* transform);
 
+    void DestroyObject(GameObjectBase* go);
+
     bool TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& goBase);
 
 
@@ -61,10 +64,13 @@ private:
     void _Render();     // Drawable 찾아다 그리기 호출 후 제출
 
     // Lifecycles
-    void Awake();
-    void Start();
+    void Awake();       // 미사용, Register시 호출
+    void Start();       // 초기화 시 Awake 후 호출, 초기화 끝났다면 Register 시 함께 호출
     void Update();
     void FixedUpdate();
+    void OnDestroy();   // 미사용, Destroy 시 호출
+
+    bool isStarted = false;
 
     // 원래는 이벤트가 맞겠지만..
     // 임시로 클릭 매니저 갖다가 직접 호출 Handle~

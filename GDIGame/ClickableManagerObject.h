@@ -10,8 +10,9 @@ private:
     ClickableManager* pClickableManager;
 
 public:
-    ClickableManagerObject() = default;
+    ClickableManagerObject();
     ClickableManagerObject(const ClickableManagerObject&) = delete;
+
     ~ClickableManagerObject() override;
 
     ClickableManager* GetClickableManager() const { return pClickableManager; }
@@ -21,4 +22,6 @@ public:
     void Start() override;
     void Update(float deltaTime) override;
     void FixedUpdate() override;
+
+    void OnDestroy() override;
 };

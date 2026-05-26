@@ -4,7 +4,9 @@
 
 class IDrawable {
 public:
-	// Drawable() = delete;
+	IDrawable() = default;
+	IDrawable(const IDrawable&) = delete;
+
 	virtual ~IDrawable() = default;
 
 	virtual void Draw(HDC hdc) = 0;
