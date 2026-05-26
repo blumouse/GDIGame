@@ -3,11 +3,9 @@
 #include "Utillity.h"
 #include <algorithm>
 
-namespace learning
-{
-    struct ColliderCircle;
-    struct ColliderBox;
-}
+
+// 이것도 좀 가공을 해서 써야겠다..
+
 
 namespace renderHelp
 {
@@ -25,19 +23,39 @@ enum class ObjectType
 
 constexpr int OBJECT_NAME_LEN_MAX = 15;
 
+class Component;
+
 class GameObjectBase
 {
     using Vector2f = learning::Vector2f;
-public:
-    GameObjectBase() = delete;
-    GameObjectBase(const GameObjectBase&) = delete;
 
-    GameObjectBase(ObjectType type) : m_type(type) {}
+protected:
+    const int MAX_COMPONENT_SIZE = 100;
+
+    Component** ppComponents = nullptr;
+    int componentsSize = 0;
+
+public:
+    GameObjectBase();
+    GameObjectBase(const GameObjectBase&) = delete;
 
     virtual ~GameObjectBase() = default;
 
-    virtual void Update(float deltaTime) = 0;
-    virtual void Render(HDC hdc) = 0;
+    Component** GetComponents() const { return ppComponents; }
+    int GetComponentsSize() const { return componentsSize; }
+
+
+    virtual void Awake();
+    virtual void Start();
+    virtual void Update(float deltaTime);
+    virtual void FixedUpdate();
+
+
+    // 다 필요없지 않나..?
+
+    //virtual void Render(HDC hdc) = 0;
+
+
 
     void SetPosition(float x, float y) { m_pos = { x, y }; }
     void SetDirection(Vector2f dir) { m_dir = dir; }
@@ -64,7 +82,6 @@ protected:
         m_pos.y += m_dir.y * m_speed * deltaTime;
     }
 
-protected:
     ObjectType m_type;
 
     Vector2f m_pos = { 0.0f, 0.0f };

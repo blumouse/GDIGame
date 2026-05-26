@@ -1,25 +1,39 @@
 #pragma once
-#pragma once
+
 #include "INC_Windows.h"
-#include "GameObject.h"
+#include "MyGameObject.h"
 #include "IDrawable.h"
+#include "Transform.h"
 
-class Component;
+class Panel;
 
-class PanelObject : public GameObjectBase, IDrawable {
+class PanelBitmap {
+
+};
+
+class PanelObject : public GameObjectBase, IDrawable, Transform {
 private:
-    Component* pPanel = nullptr;
-    Component* pPanelBitmap = nullptr;
+    Panel* pPanel = nullptr;
+    PanelBitmap* pPanelBitmap = nullptr;
 
 public:
+    PanelObject() = default;
     PanelObject(const PanelObject&) = delete;
-    PanelObject(ObjectType type) : GameObjectBase(type) {}
     ~PanelObject() override;
 
+    Panel* GetPanel() const { return pPanel; }
+    PanelBitmap* GetPanelBitmap() const { return pPanelBitmap; }
 
+
+    void Awake() override;
+    void Start() override;
     void Update(float deltaTime) override;
-    void Render(HDC hdc) override;
+    void FixedUpdate() override;
+
+    //void Render(HDC hdc) override;
 
 
-    void Draw() override;
+    void Draw(HDC hdc) override;
+
+
 };

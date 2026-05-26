@@ -1,7 +1,9 @@
 #pragma once
-#include "Component.h"
 
-class Panel
+#include "Component.h"
+#include "IClickable.h"
+
+class Panel : public IClickable
 {
     friend class GameManager;
 
@@ -27,11 +29,19 @@ public:
     Panel();
     ~Panel();
 
-public:
     void InitPanel();
 
-    void OnLClickPanel();
-    void OnRClickPanel();
+    // Clickable    
+    void OnMouseEnter() override;
+    void OnMouseExit() override;
+
+    void OnLDown() override;
+    void OnLComplete() override;
+    void OnLCancel() override;
+
+    void OnRDown() override;
+    void OnRComplete() override;
+    void OnRCancel() override;
 
 private:
     void OpenPanel();
@@ -40,8 +50,4 @@ private:
     void SetMarkedPanel();
 
     void ForceOpenLinkedPanel();
-
-private:
-    bool CanOpen() const;
-    bool IsEmptyPanel() const;
 };

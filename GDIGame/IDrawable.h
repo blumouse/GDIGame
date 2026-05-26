@@ -1,9 +1,11 @@
 #pragma once
 
+#include "INC_Windows.h"
+
 class IDrawable {
 public:
-	// IDrawable();
+	// Drawable() = delete;
 	virtual ~IDrawable() = default;
 
-	virtual void Draw() = 0;
+	virtual void Draw(HDC hdc) = 0;
 };

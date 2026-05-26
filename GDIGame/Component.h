@@ -4,11 +4,13 @@ class GameObjectBase;
 
 class Component {
 public:
-	Component();
-	~Component();
+	Component() = delete;
+	Component(const Component&) = delete;
 
-	GameObjectBase* GetObject();
+	virtual ~Component() = default;
 
-private:
+	GameObjectBase* GetGameObject() const { return pObject; }
+
+protected:
 	GameObjectBase* pObject = nullptr;
 };
