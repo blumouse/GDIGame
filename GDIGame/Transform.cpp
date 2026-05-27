@@ -1,8 +1,9 @@
 #include "Transform.h"
+#include "Game.h"
 
 Transform::Transform() : pos(Vector2(0,0)), scale(Vector2{ 1,1 })
 {
-
+	Game::GetInstance()->RegisterTransform(this);
 }
 
 

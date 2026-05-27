@@ -4,7 +4,7 @@
 
 class IDrawable {
 public:
-	IDrawable() = default;
+	IDrawable();
 	IDrawable(const IDrawable&) = delete;
 
 	virtual ~IDrawable() = default;
