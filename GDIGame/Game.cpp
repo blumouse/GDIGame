@@ -27,9 +27,11 @@ using namespace learning;
 // pch 하나 묶어서 놔둘까?
 // Transform 함수 구현
 // 패널에서 Drawable 구현해보기
-// 
-// 클릭매니저 구현하기 전까진 마우스함수 지워놓고 해야겠군;
+
 // 로드 리소스 만들기
+// 여유되면 friends로 뺄거도 생각해보기 (주로 Game에서 가져갈거)
+
+
 
 // 엄 어디까지 된거지 프레임워크..?
 // gmo부분 테스트겸 만들어보면서 또 하니까 좀 헷갈
@@ -249,7 +251,7 @@ void Game::_Render()
     //    }
     //}
 
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    for (int i = 0; i < gameObjectsIndex; ++i)
     {
         if (ppDrawables[i])
         {
@@ -278,69 +280,78 @@ void Game::_Render()
 
 void Game::Start()
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    for (int i = 0; i < gameObjectsIndex; ++i)
     {
         if (ppGameObjects[i])
         {
             ppGameObjects[i]->Start();
         }
-        else
-            break;
     }
 }
 
 
 void Game::Update()
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    for (int i = 0; i < gameObjectsIndex; ++i)
     {
         if (ppGameObjects[i])
         {
             ppGameObjects[i]->Update(fDeltaTime);
         }
-        else
-            break;
     }
 }
 
 
 void Game::FixedUpdate()
 {
-    for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
+    for (int i = 0; i < gameObjectsIndex; ++i)
     {
         if (ppGameObjects[i])
         {
             ppGameObjects[i]->FixedUpdate();
         }
-        else
-            break;
     }
 }
 
 
 void Game::OnMouseMove(int x, int y)
 {
-    ClickableManager::GetInstance()->HandleMouseMove(x, y);
+    ClickableManager* cm = nullptr;
+
+    if (cm = ClickableManager::GetInstance())
+        cm->HandleMouseMove(x, y);
 }
 
 void Game::OnLButtonDown(int x, int y)
 {
-    ClickableManager::GetInstance()->HandleLDown(x, y);
+    ClickableManager* cm = nullptr;
+
+    if (cm = ClickableManager::GetInstance())
+        cm->HandleLDown(x, y);
 }
 
 void Game::OnRButtonDown(int x, int y)
 {
-    ClickableManager::GetInstance()->HandleRDown(x, y);
+    ClickableManager* cm = nullptr;
+
+    if (cm = ClickableManager::GetInstance())
+        cm->HandleRDown(x, y);
 }
 
 void Game::OnLButtonUp(int x, int y)
 {
-    ClickableManager::GetInstance()->HandleLUp(x, y);
+    ClickableManager* cm = nullptr;
+
+    if (cm = ClickableManager::GetInstance())
+        cm->HandleLUp(x, y);
 }
 
 void Game::OnRButtonUp(int x, int y)
 {
-    ClickableManager::GetInstance()->HandleRUp(x, y);
+    ClickableManager* cm = nullptr;
+
+    if (cm = ClickableManager::GetInstance())
+        cm->HandleRUp(x, y);
 }
 
 
@@ -475,7 +486,7 @@ bool Game::TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& gameObje
     {
         if (ppTransforms[i])
         {
-            if (ppTransforms[i]->IsIntersect(mouseX, mouseY))
+            if (ppTransforms[i]->IsIntersectPoint(mouseX, mouseY))
             {
                 // 어 그 주소 go 맞아.. 더 확실하게 보장시킬수 없나 transform에?
                 gameObject = dynamic_cast<GameObjectBase*>(ppTransforms[i]);

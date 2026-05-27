@@ -14,8 +14,10 @@ public:
 
 	virtual ~Transform() = default;
 
+
 	Vector2 pos;		// 화면좌표를 그대로 가지는걸로 하자 귀찮으니
 	Vector2 scale;		// 유사 콜라이더(크기), 기본 사각형 변의 길이로 치고 AABB해주자
+
 
 	virtual bool IsIntersectPoint(int x, int y);
 

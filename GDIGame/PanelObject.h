@@ -18,7 +18,7 @@ class PanelBitmap : public Component
 {
 public:
     PanelBitmap() = delete;
-    PanelBitmap(GameObjectBase* gameObject);
+    PanelBitmap(GameObjectBase* gameObject) : Component(gameObject) {}
 
     ~PanelBitmap() override;
 };

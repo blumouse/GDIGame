@@ -23,9 +23,9 @@ private:
 
 public:
     GameManager() = delete;
-    GameManager(GameObjectBase* gameObject);
+    GameManager(GameObjectBase* gameObject) : Component(gameObject) { }
 
-    ~GameManager() override;
+    ~GameManager() override = default;
 
     GameManager(const GameManager&) = delete;
     GameManager& operator=(const GameManager&) = delete;
@@ -43,7 +43,7 @@ public:
     // Own Logic
 
     // Singleton
-    static GameManager* GetInstance();
+    static GameManager* GetInstance() { return instance; }
     //static void DestroyInstance();
 
 

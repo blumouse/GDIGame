@@ -6,7 +6,7 @@ class Component {
 public:
 	Component() = delete;
 	Component(const Component&) = delete;
-	Component(GameObjectBase* gameObject) : pObject(gameObject) { }
+	Component(GameObjectBase* gameObject) : pGameObject(gameObject) { }
 
 	virtual ~Component() = default;
 
@@ -19,8 +19,8 @@ public:
 	virtual void OnDestroy() = 0;
 
 
-	GameObjectBase* GetGameObject() const { return pObject; }
+	GameObjectBase* GetGameObject() const { return pGameObject; }
 
 protected:
-	GameObjectBase* pObject = nullptr;
+	GameObjectBase* pGameObject = nullptr;
 };

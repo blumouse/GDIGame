@@ -52,5 +52,5 @@ public:
     void HandleRUp(int mouseX, int mouseY);
 
 
-    IClickable* TryGetClickable(GameObjectBase* pObject);
+    IClickable* TryGetClickable(GameObjectBase* pGameObject);
 };

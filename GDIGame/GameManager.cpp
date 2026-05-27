@@ -3,22 +3,6 @@
 
 #include "PanelObject.h"
 
-// TODO: 헤더 인라인으로 걍 옮기기
-#pragma region Framework
-
-GameManager::GameManager(GameObjectBase* gameObject) : Component(gameObject) {
-	// 없어!
-}
-
-GameManager::~GameManager() {}
-
-#pragma endregion
-
-GameManager* GameManager::GetInstance()
-{
-	return instance;
-}
-
 
 #pragma region Lifecycles
 
@@ -28,7 +12,7 @@ void GameManager::Awake()
 	if (instance != nullptr && instance != this)
 	{
 		// 오브젝트까지 파괴
-		Game::GetInstance()->DestroyObject(pObject);
+		Game::GetInstance()->DestroyObject(pGameObject);
 		return;
 	}
 	else /*if (instance == nullptr)*/
