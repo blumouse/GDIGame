@@ -4,18 +4,22 @@
 
 int main()
 {
-	if (false == Game::GetInstance()->Initialize())
+	Game* game = new Game;
+
+
+	if (false == game->Initialize())
 	{
 		std::cout << "Failed to initialize the game. Error: " << GetLastError() << std::endl;
+		delete game;
 		return -1;
 	}
 
-	Game::GetInstance()->Run();
+	game->Run();
 
-	Game::GetInstance()->Finalize();
+	game->Finalize();
 
 
-	Game::DestroyInstance();
+	delete game;
 
 	return 0;
 

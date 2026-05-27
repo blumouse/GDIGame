@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Collider.cpp" />
+    <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameManagerObject.cpp" />
@@ -134,7 +135,9 @@
     <ClCompile Include="MyFirstWndGame.cpp" />
     <ClCompile Include="MyGameObject.cpp" />
     <ClCompile Include="NzWndBase.cpp" />
+    <ClCompile Include="PanelObject.cpp" />
     <ClCompile Include="RenderHelp.cpp" />
+    <ClCompile Include="Transform.cpp" />
     <ClCompile Include="Utillity.cpp" />
   </ItemGroup>
   <ItemGroup>

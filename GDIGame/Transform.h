@@ -1,25 +1,22 @@
 #pragma once
 
-struct Pos2D
-{
-	short x;
-	short y;
-};
+#include "Utillity.h"
 
 // 컴포넌트로 넣기엔 뭔가 영 애매하다
+// 아니 사실 걍 고정 컴포넌트로 넣는게 맞긴 하겠지만..
 class Transform
 {
+	using Vector2 = learning::Vector2f;
+
 public:
-	Transform() = default;
+	Transform();
 	Transform(const Transform&) = delete;
 
 	virtual ~Transform() = default;
 
-	Pos2D pos;
-	Pos2D scale;		// 유사 콜라이더
+	Vector2 pos;		// 화면좌표를 그대로 가지는걸로 하자 귀찮으니
+	Vector2 scale;		// 유사 콜라이더(크기), 기본 사각형 변의 길이로 치고 AABB해주자
 
-	virtual bool IsIntersect(int x, int y);
-
-private:
+	virtual bool IsIntersectPoint(int x, int y);
 
 };

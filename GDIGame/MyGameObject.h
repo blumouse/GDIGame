@@ -1,34 +1,9 @@
 #pragma once
 
-#include "Utillity.h"
-#include <algorithm>
-
-
-// 이것도 좀 가공을 해서 써야겠다..
-
-
-namespace renderHelp
-{
-    class BitmapInfo;
-}
-
-enum class ObjectType
-{
-    PLAYER,
-    ENEMY,
-    BULLET,
-    ITEM,
-    BACKGROUND,
-};
-
-constexpr int OBJECT_NAME_LEN_MAX = 15;
-
 class Component;
 
 class GameObjectBase
 {
-    using Vector2f = learning::Vector2f;
-
 protected:
     const int MAX_COMPONENT_SIZE = 100;
 
@@ -53,48 +28,50 @@ public:
     virtual void OnDestroy();
 
 
+
+
     // 다 필요없지 않나..?
 
     //virtual void Render(HDC hdc) = 0;
 
 
 
-    void SetPosition(float x, float y) { m_pos = { x, y }; }
-    void SetDirection(Vector2f dir) { m_dir = dir; }
-    void SetSpeed(float speed) { m_speed = speed; }
-    void SetName(const char* name);
-
-    ObjectType Type() const { return m_type; }
-
-    const char* GetName() const { return m_name; }
-
-    Vector2f GetPosition() const { return m_pos; }
-    Vector2f GetDirection() const { return m_dir; }
-
-    float GetSpeed() const { return m_speed; }
-
-    void SetWidth(int width) { m_width = width; }
-    void SetHeight(int height) { m_height = height; }
-
-protected:
-
-    void Move(float deltaTime)
-    {
-        m_pos.x += m_dir.x * m_speed * deltaTime;
-        m_pos.y += m_dir.y * m_speed * deltaTime;
-    }
-
-    ObjectType m_type;
-
-    Vector2f m_pos = { 0.0f, 0.0f };
-    Vector2f m_dir = { 0.0f, 0.0f }; // 방향 (단위 벡터)
-
-    int m_width;
-    int m_height;
-
-    float m_speed = 0.0f; // 속력
-
-    char m_name[OBJECT_NAME_LEN_MAX] = "";
+//    void SetPosition(float x, float y) { m_pos = { x, y }; }
+//    void SetDirection(Vector2f dir) { m_dir = dir; }
+//    void SetSpeed(float speed) { m_speed = speed; }
+//    void SetName(const char* name);
+//
+//    ObjectType Type() const { return m_type; }
+//
+//    const char* GetName() const { return m_name; }
+//
+//    Vector2f GetPosition() const { return m_pos; }
+//    Vector2f GetDirection() const { return m_dir; }
+//
+//    float GetSpeed() const { return m_speed; }
+//
+//    void SetWidth(int width) { m_width = width; }
+//    void SetHeight(int height) { m_height = height; }
+//
+//protected:
+//
+//    void Move(float deltaTime)
+//    {
+//        m_pos.x += m_dir.x * m_speed * deltaTime;
+//        m_pos.y += m_dir.y * m_speed * deltaTime;
+//    }
+//
+//    ObjectType m_type;
+//
+//    Vector2f m_pos = { 0.0f, 0.0f };
+//    Vector2f m_dir = { 0.0f, 0.0f }; // 방향 (단위 벡터)
+//
+//    int m_width;
+//    int m_height;
+//
+//    float m_speed = 0.0f; // 속력
+//
+//    char m_name[OBJECT_NAME_LEN_MAX] = "";
 };
 
 //class GameObject : public GameObjectBase

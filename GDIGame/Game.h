@@ -1,6 +1,7 @@
 #pragma once
 #include "NzWndBase.h"
 #include "Utillity.h"
+#include "RenderHelp.h"
 
 class GameTimer;
 class GameObjectBase;
@@ -43,7 +44,7 @@ public:
     ~Game() override = default;
 
     static Game* GetInstance();
-    static void DestroyInstance();
+    //static void DestroyInstance();    필요 없는듯? 생성한 쪽에서 지워야지
 
     bool Initialize();
     void Run();
@@ -54,9 +55,9 @@ public:
     void RegisterDrawable(IDrawable* drawable);
     void RegisterTransform(Transform* transform);
 
-    void DestroyObject(GameObjectBase* go);
+    void DestroyObject(GameObjectBase* gameObject);
 
-    bool TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& goBase);
+    bool TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& gameObject);
 
 
 private:
@@ -85,7 +86,7 @@ private:
     void OnClose() override;
 
 
-    void LoadResources();
+    bool LoadResources();
 
 
 private:

@@ -7,7 +7,7 @@ class ClickableManager;
 class ClickableManagerObject : public GameObjectBase
 {
 private:
-    ClickableManager* pClickableManager;
+    ClickableManager* pClickableManager = nullptr;
 
 public:
     ClickableManagerObject();
@@ -15,13 +15,15 @@ public:
 
     ~ClickableManagerObject() override;
 
-    ClickableManager* GetClickableManager() const { return pClickableManager; }
 
-
+    // GameObjectBase (Lifecycles)
     void Awake() override;
     void Start() override;
     void Update(float deltaTime) override;
     void FixedUpdate() override;
 
     void OnDestroy() override;
+
+
+    ClickableManager* GetClickableManager() const { return pClickableManager; }
 };

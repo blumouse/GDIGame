@@ -30,7 +30,7 @@ public:
 
 
     static ClickableManager* GetInstance();
-    static void DestroyInstance();
+    //static void DestroyInstance();
 
 
     // Component (Lifecycles)

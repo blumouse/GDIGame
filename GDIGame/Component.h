@@ -6,7 +6,7 @@ class Component {
 public:
 	Component() = delete;
 	Component(const Component&) = delete;
-	Component(GameObjectBase* gameObject) { pObject = gameObject; }
+	Component(GameObjectBase* gameObject) : pObject(gameObject) { }
 
 	virtual ~Component() = default;
 

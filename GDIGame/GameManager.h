@@ -8,11 +8,14 @@ class GameManager : public Component {
 private:
     static GameManager* instance;
 
-    int row;
-    int col;
-    Panel* pPanels;        // row * col 크기의 동적 배열
+    const int ROW = 50;
+    const int COL = 50;
 
-    int mineAmount;
+    const int MINE_AMOUNT = 100;
+
+    // row * col 크기의 동적 배열
+    Panel** ppPanels;
+
     int openedPanel;
 
     bool isBoom;
@@ -41,7 +44,7 @@ public:
 
     // Singleton
     static GameManager* GetInstance();
-    static void DestroyInstance();
+    //static void DestroyInstance();
 
 
     void InitGame(int row, int col, int mineAmount);
@@ -53,7 +56,8 @@ public:
     void FinalizeGame();
 
 
-    void InitPanels();
-    void InitRandomMines();
+private:
+    void InitPanels(int row, int col);
+    void InitRandomMines(int mineAmount);
     void InitPanelProps();
 };
