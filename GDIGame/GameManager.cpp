@@ -52,11 +52,12 @@ void GameManager::OnDestroy()
 
 void GameManager::InitGame(int row, int col, int mineAmount)
 {
-	InitPanels(row, col);
+	// ¿·±Ò ∏ÿ√Á∫¡
+	//InitPanels(row, col);
 
-	InitRandomMines(mineAmount);
+	//InitRandomMines(mineAmount);
 
-	InitPanelProps();
+	//InitPanelProps();
 }
 
 void GameManager::OnBoom(Panel* pBoomPanel)

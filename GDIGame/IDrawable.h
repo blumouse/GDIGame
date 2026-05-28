@@ -3,10 +3,11 @@
 #include "INC_Windows.h"
 
 class IDrawable {
-public:
+protected:
 	IDrawable();
 	IDrawable(const IDrawable&) = delete;
 
+public:
 	virtual ~IDrawable() = default;
 
 	virtual void Draw(HDC hdc) = 0;

@@ -5,15 +5,16 @@ class Component;
 class GameObjectBase
 {
 protected:
-    const int MAX_COMPONENT_SIZE = 100;
+    const int MAX_COMPONENT_SIZE = 20;
 
     Component** ppComponents = nullptr;
     int componentsSize = 0;
 
-public:
+
     GameObjectBase();
     GameObjectBase(const GameObjectBase&) = delete;
 
+public:
     virtual ~GameObjectBase();
 
     Component** GetComponents() const { return ppComponents; }

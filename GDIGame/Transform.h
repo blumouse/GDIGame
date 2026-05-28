@@ -8,10 +8,11 @@ class Transform
 {
 	using Vector2 = learning::Vector2f;
 
-public:
+protected:
 	Transform();
 	Transform(const Transform&) = delete;
 
+public:
 	virtual ~Transform() = default;
 
 

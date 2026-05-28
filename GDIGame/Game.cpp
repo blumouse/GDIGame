@@ -25,7 +25,6 @@ using namespace learning;
 
 // TODO: 
 // pch 하나 묶어서 놔둘까?
-// Transform 함수 구현
 // 패널에서 Drawable 구현해보기
 
 // 로드 리소스 만들기
@@ -38,7 +37,7 @@ using namespace learning;
 // 일단 내부로직 안채우고 흰화면부터 띄워보자
 
 
-constexpr int MAX_GAME_OBJECT_COUNT = 10000;
+constexpr int MAX_GAME_OBJECT_COUNT = 1000;
 
 Game* Game::GetInstance() 
 {
@@ -109,6 +108,8 @@ bool Game::Initialize()
 
     // 생성!!
     // 유니티로 치면.. 하이라키에 올라가있는 오브젝트들
+    // ... 하이라키를 만들어버릴수도 있겠는데
+
     ClickableManagerObject* cmo = new ClickableManagerObject();
     //RegisterObject(cmo);
 

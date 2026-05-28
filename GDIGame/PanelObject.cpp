@@ -6,7 +6,7 @@
 PanelObject::PanelObject() 
 {
 	pPanel = new Panel(this);
-	pPanelBitmap = new PanelBitmap(this);
+	//pPanelBitmap = new PanelBitmap(this);
 
 	ppComponents[componentsSize++] = pPanel;
 	ppComponents[componentsSize++] = pPanelBitmap;
