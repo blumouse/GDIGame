@@ -41,6 +41,9 @@ private:
 
 public:
     Game() = default;
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+
     ~Game() override = default;
 
     static Game* GetInstance();

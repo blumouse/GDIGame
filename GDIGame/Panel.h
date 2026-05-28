@@ -8,30 +8,28 @@ class Panel : public Component, IClickable
     friend class GameManager;
 
 private:
-    bool isMine;
-    bool isOpen;
-    bool isMarked;
+    bool isMine = false;
+    bool isOpen = false;
+    bool isMarked = false;
 
-    Panel* pPanel_NW;
-    Panel* pPanel_N;
-    Panel* pPanel_NE;
+    Panel* pPanel_NW = nullptr;
+    Panel* pPanel_N = nullptr;
+    Panel* pPanel_NE = nullptr;
 
-    Panel* pPanel_W;
-    Panel* pPanel_E;
+    Panel* pPanel_W = nullptr;
+    Panel* pPanel_E = nullptr;
 
-    Panel* pPanel_SW;
-    Panel* pPanel_S;
-    Panel* pPanel_SE;
+    Panel* pPanel_SW = nullptr;
+    Panel* pPanel_S = nullptr;
+    Panel* pPanel_SE = nullptr;
 
-    int surroundingMine;
+    int surroundingMine = 0;
 
 public:
     Panel() = delete;
-    Panel(GameObjectBase* gameObject);
+    Panel(GameObjectBase* gameObject) : Component(gameObject) {}
 
-    ~Panel() override;
-
-    void InitPanel();
+    ~Panel() override = default;
 
 
     // Component (Lifecycles)
@@ -54,6 +52,10 @@ public:
     void OnRDown() override;
     void OnRComplete() override;
     void OnRCancel() override;
+
+
+    // Own Logic
+    void InitPanel();
 
 
 private:

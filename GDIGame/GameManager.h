@@ -43,7 +43,7 @@ public:
     // Own Logic
 
     // Singleton
-    static GameManager* GetInstance() { return instance; }
+    static GameManager* GetInstance();
     //static void DestroyInstance();
 
 

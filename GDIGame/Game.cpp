@@ -39,11 +39,9 @@ using namespace learning;
 
 constexpr int MAX_GAME_OBJECT_COUNT = 1000;
 
-Game* Game::GetInstance() 
-{
-    return instance;
-}
+Game* Game::instance = nullptr;
 
+Game* Game::GetInstance() { return Game::instance; }
 
 bool Game::Initialize()
 {
@@ -85,10 +83,10 @@ bool Game::Initialize()
 
 
     // 초초기화 2
-    //if (!LoadResources())
-    //{
-    //    return false;
-    //}
+    if (!LoadResources())
+    {
+        return false;
+    }
 
 
     // 게임 초기화
@@ -385,10 +383,11 @@ void Game::OnClose()
 }
 
 
-//void Game::LoadResources() 
-//{
-//
-//}
+bool Game::LoadResources() 
+{
+    // TODO
+    return true;
+}
 
 
 void Game::RegisterObject(GameObjectBase* gameObject)

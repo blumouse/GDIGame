@@ -15,15 +15,15 @@ private:
 
     std::vector<IClickable*> ppClickables;
 
-    IClickable* curOver;
-    IClickable* interacting;
+    IClickable* curOver = nullptr;
+    IClickable* interacting = nullptr;
 
 
 public:
     ClickableManager() = delete;
-    ClickableManager(GameObjectBase* gameObject);
+    ClickableManager(GameObjectBase* gameObject) : Component(gameObject) {}
 
-    ~ClickableManager() override;
+    ~ClickableManager() override = default;
 
     ClickableManager(const ClickableManager&) = delete;
     ClickableManager& operator=(const ClickableManager&) = delete;

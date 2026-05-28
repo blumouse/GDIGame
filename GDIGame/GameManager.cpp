@@ -4,6 +4,10 @@
 #include "PanelObject.h"
 
 
+GameManager* GameManager::instance = nullptr;
+
+GameManager* GameManager::GetInstance() { return GameManager::instance; }
+
 #pragma region Lifecycles
 
 void GameManager::Awake()

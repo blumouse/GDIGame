@@ -16,16 +16,16 @@ public:
     GameManagerObject();
     GameManagerObject(const GameManagerObject&) = delete;
 
-    ~GameManagerObject() override;
+    ~GameManagerObject() override = default;
 
 
     // GameObjectBase (Lifecycles)
-    void Awake() override;
-    void Start() override;
-    void Update(float deltaTime) override;
-    void FixedUpdate() override;
+    //void Awake() override;
+    //void Start() override;
+    //void Update(float deltaTime) override;
+    //void FixedUpdate() override;
 
-    void OnDestroy() override;
+    //void OnDestroy() override;
 
 
     GameManager* GetGameManager() const { return pGameManager; }

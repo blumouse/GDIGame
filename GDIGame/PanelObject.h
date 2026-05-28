@@ -4,29 +4,12 @@
 #include "MyGameObject.h"
 #include "IDrawable.h"
 #include "Transform.h"
-#include "RenderHelp.h"
-
-namespace renderHelp
-{
-    class BitmapInfo;
-}
 
 class Panel;
-
-// TODO: 이거 나중에 분리
-class PanelBitmap : public Component
-{
-public:
-    PanelBitmap() = delete;
-    PanelBitmap(GameObjectBase* gameObject) : Component(gameObject) {}
-
-    ~PanelBitmap() override;
-};
+class PanelBitmap;
 
 class PanelObject : public GameObjectBase, IDrawable, Transform 
 {
-    using BitmapInfo = renderHelp::BitmapInfo;
-
 private:
     Panel* pPanel = nullptr;
     PanelBitmap* pPanelBitmap = nullptr;
@@ -35,19 +18,19 @@ public:
     PanelObject();
     PanelObject(const PanelObject&) = delete;
 
-    ~PanelObject() override;
+    ~PanelObject() override = default;
 
     Panel* GetPanel() const { return pPanel; }
     PanelBitmap* GetPanelBitmap() const { return pPanelBitmap; }
 
 
     // GameObjectBase (Lifecycles)
-    void Awake() override;
-    void Start() override;
-    void Update(float deltaTime) override;
-    void FixedUpdate() override;
+    //void Awake() override;
+    //void Start() override;
+    //void Update(float deltaTime) override;
+    //void FixedUpdate() override;
 
-    void OnDestroy() override;
+    //void OnDestroy() override;
 
 
     // IDrawable
@@ -55,5 +38,5 @@ public:
 
 
     // Transform
-    bool IsIntersectPoint(int x, int y) override;
+    //bool IsIntersectPoint(int x, int y) override;
 };

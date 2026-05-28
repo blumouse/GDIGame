@@ -11,3 +11,11 @@ GameManagerObject::GameManagerObject()
 
 	ppComponents[componentsSize++] = pGameManager;
 }
+
+
+#pragma region Lifecycles
+
+// ±×´ë·Î
+
+#pragma endregion
+

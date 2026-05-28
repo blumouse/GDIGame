@@ -124,6 +124,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClickableManager.cpp" />
+    <ClCompile Include="ClickableManagerObject.cpp" />
     <ClCompile Include="Collider.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Game.cpp" />
@@ -136,6 +138,8 @@
     <ClCompile Include="MyFirstWndGame.cpp" />
     <ClCompile Include="MyGameObject.cpp" />
     <ClCompile Include="NzWndBase.cpp" />
+    <ClCompile Include="Panel.cpp" />
+    <ClCompile Include="PanelBitmap.cpp" />
     <ClCompile Include="PanelObject.cpp" />
     <ClCompile Include="RenderHelp.cpp" />
     <ClCompile Include="Transform.cpp" />
@@ -158,6 +162,7 @@
     <ClInclude Include="MyGameObject.h" />
     <ClInclude Include="NzWndBase.h" />
     <ClInclude Include="Panel.h" />
+    <ClInclude Include="PanelBitmap.h" />
     <ClInclude Include="PanelObject.h" />
     <ClInclude Include="RenderHelp.h" />
     <ClInclude Include="Transform.h" />
