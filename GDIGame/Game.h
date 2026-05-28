@@ -60,7 +60,9 @@ public:
 
     void DestroyObject(GameObjectBase* gameObject);
 
-    bool TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& gameObject);
+
+    GameObjectBase* GetObjectWithPos(int mouseX, int mouseY);
+    bool TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& pGameObject);
 
 
 private:

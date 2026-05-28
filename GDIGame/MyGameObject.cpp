@@ -6,7 +6,6 @@
 GameObjectBase::GameObjectBase() 
 {
 	ppComponents = new Component* [MAX_COMPONENT_SIZE];
-	Game::GetInstance()->RegisterObject(this);
 }
 
 // ..?

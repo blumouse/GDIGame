@@ -4,9 +4,10 @@
 
 // 컴포넌트로 넣기엔 뭔가 영 애매하다
 // 아니 사실 걍 고정 컴포넌트로 넣는게 맞긴 하겠지만..
+using Vector2 = learning::Vector2f;
+
 class Transform
 {
-	using Vector2 = learning::Vector2f;
 
 protected:
 	Transform();

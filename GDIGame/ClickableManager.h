@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vector>
-
 #include "Component.h"
 #include "MyGameObject.h"
 #include "Transform.h"
@@ -13,10 +11,12 @@ class ClickableManager : public Component
 private:
     static ClickableManager* instance;
 
-    std::vector<IClickable*> ppClickables;
 
     IClickable* curOver = nullptr;
-    IClickable* interacting = nullptr;
+    IClickable* interactingL = nullptr;
+    IClickable* interactingR = nullptr;
+    bool isLDown = false;
+    bool isRDown = false;
 
 
 public:
@@ -29,10 +29,6 @@ public:
     ClickableManager& operator=(const ClickableManager&) = delete;
 
 
-    static ClickableManager* GetInstance();
-    //static void DestroyInstance();
-
-
     // Component (Lifecycles)
     void Awake() override;
     void Start() override;
@@ -40,6 +36,13 @@ public:
     void FixedUpdate() override;
 
     void OnDestroy() override;
+
+
+    // Own Logic
+
+    // Singleton
+    static ClickableManager* GetInstance();
+    //static void DestroyInstance();
 
 
     // Input Events
@@ -52,5 +55,7 @@ public:
     void HandleRUp(int mouseX, int mouseY);
 
 
-    IClickable* TryGetClickable(GameObjectBase* pGameObject);
+    // Manager
+    IClickable* GetClickable(GameObjectBase* pGameObject);
+    bool TryGetClickable(GameObjectBase* pGameObject, IClickable*& pClickable);
 };

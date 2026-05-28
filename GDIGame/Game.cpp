@@ -10,7 +10,6 @@
 
 #include "GameManagerObject.h"
 #include "ClickableManagerObject.h"
-#include "PanelObject.h"
 
 #include "ClickableManager.h"
 
@@ -24,17 +23,14 @@ using namespace learning;
 // 아 비트맵도 연결해야됨;
 
 // TODO: 
+// 클릭 ux.. 하다가 머리아파서 게임로직 만들기; ㅎ
+// 임시로 걍 콜라이더로 그리기
+
+
 // pch 하나 묶어서 놔둘까?
 // 패널에서 Drawable 구현해보기
-
 // 로드 리소스 만들기
 // 여유되면 friends로 뺄거도 생각해보기 (주로 Game에서 가져갈거)
-
-
-
-// 엄 어디까지 된거지 프레임워크..?
-// gmo부분 테스트겸 만들어보면서 또 하니까 좀 헷갈
-// 일단 내부로직 안채우고 흰화면부터 띄워보자
 
 
 constexpr int MAX_GAME_OBJECT_COUNT = 1000;
@@ -63,7 +59,7 @@ bool Game::Initialize()
     const wchar_t* className = L"MiniGame";
     const wchar_t* windowName = L"지뢰찾기";
 
-    if (false == __super::Create(className, windowName, 1024, 720))
+    if (false == __super::Create(className, windowName, 500, 600))
     {
         return false;
     }
@@ -401,6 +397,7 @@ void Game::RegisterObject(GameObjectBase* gameObject)
             ppGameObjects[i] = gameObject;
             gameObject->Awake();
 
+            // 아몰라
             if (isStarted)
                 gameObject->Start();
 
@@ -480,21 +477,34 @@ void Game::DestroyObject(GameObjectBase* gameObject)
 }
 
 
-bool Game::TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& gameObject)
+GameObjectBase* Game::GetObjectWithPos(int mouseX, int mouseY)
 {
+    GameObjectBase* gameObject = nullptr;
+
     for (int i = 0; i < gameObjectsIndex; i++)
     {
-        if (ppTransforms[i])
+        if (ppTransforms[i] && ppTransforms[i]->IsIntersectPoint(mouseX, mouseY))
+            gameObject = dynamic_cast<GameObjectBase*>(ppTransforms[i]);
+    }
+
+    return gameObject;
+}
+
+bool Game::TryGetObjectWithPos(int mouseX, int mouseY, GameObjectBase*& pGameObject)
+{
+    GameObjectBase* gameObject = nullptr;
+
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppTransforms[i] && ppTransforms[i]->IsIntersectPoint(mouseX, mouseY))
         {
-            if (ppTransforms[i]->IsIntersectPoint(mouseX, mouseY))
+            // 어 그 주소 go 맞아.. 더 확실하게 보장시킬수 없나 transform에?
+            if (gameObject = dynamic_cast<GameObjectBase*>(ppTransforms[i]))
             {
-                // 어 그 주소 go 맞아.. 더 확실하게 보장시킬수 없나 transform에?
-                gameObject = dynamic_cast<GameObjectBase*>(ppTransforms[i]);
+                pGameObject = gameObject;
                 return true;
             }
         }
-        else
-            return false;
     }
 
     return false;

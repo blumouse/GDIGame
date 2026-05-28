@@ -1,4 +1,5 @@
 #include "ClickableManagerObject.h"
+#include "Game.h"
 #include "ClickableManager.h"
 
 
@@ -9,6 +10,9 @@ ClickableManagerObject::ClickableManagerObject()
 	pClickableManager = new ClickableManager(this);
 
 	ppComponents[componentsSize++] = pClickableManager;
+
+
+	Game::GetInstance()->RegisterObject(this);
 }
 
 

@@ -8,7 +8,7 @@
 class Panel;
 class PanelBitmap;
 
-class PanelObject : public GameObjectBase, IDrawable, Transform 
+class PanelObject : public GameObjectBase, public IDrawable, public Transform
 {
 private:
     Panel* pPanel = nullptr;
@@ -38,5 +38,6 @@ public:
 
 
     // Transform
+
     //bool IsIntersectPoint(int x, int y) override;
 };

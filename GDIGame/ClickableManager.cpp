@@ -1,5 +1,6 @@
 #include "ClickableManager.h"
 #include "Game.h"
+#include "IClickable.h"
 
 
 ClickableManager* ClickableManager::instance = nullptr;
@@ -52,32 +53,175 @@ void ClickableManager::OnDestroy()
 
 void ClickableManager::HandleMouseMove(int mouseX, int mouseY)
 {
+	GameObjectBase* go = Game::GetInstance()->GetObjectWithPos(mouseX, mouseY);
+	IClickable* hover = nullptr;
 
+	hover = GetClickable(go);
+
+
+	if (curOver == hover)
+	{
+		// 절대 아무것도 안함
+		return;
+	}
+	else /*(curOver != hover)*/
+	{
+		if (interactingL)
+			;
+
+		if (interactingR)
+			;
+
+		if (isLDown)
+			;
+
+		if (isRDown)
+			;
+
+
+		if (curOver)
+			curOver->OnMouseExit();
+
+		if (hover)
+			hover->OnMouseEnter();
+
+		curOver = hover;
+	}
 }
 
 void ClickableManager::HandleLDown(int mouseX, int mouseY)
 {
+	if (isLDown) {}
+		// ??
 
+	if (interactingL) {}
+		// ??
+
+	if (isRDown) 
+	{
+		// 우클릭 취소 시켜주는걸로 할까?
+	}
+
+	if (curOver)
+	{
+		curOver->OnLDown();
+		interactingL = curOver;
+	}
+
+	if (interactingR) {}
+
+
+	isLDown = true;
 }
+
 void ClickableManager::HandleLUp(int mouseX, int mouseY)
 {
+	if (isRDown)
+	{
 
+	}
+
+	if (isLDown) 
+	{
+		if (interactingL)
+		{
+			if (interactingL == curOver)
+			{
+				interactingL->OnLComplete();
+			}
+			else	/*(interacting != curOver)*/
+			{
+				interactingL->OnLCancel();
+			}
+		}
+	}
+	else	// ??
+	{
+
+	}
+
+
+	interactingL = nullptr;
+	isLDown = false;
 }
 
 void ClickableManager::HandleRDown(int mouseX, int mouseY)
 {
+	if (isRDown) {}
+	// ??
 
+	if (interactingR) {}
+	// ??
+
+	if (isLDown)
+	{
+
+	}
+
+	if (curOver)
+	{
+		curOver->OnRDown();
+		interactingR = curOver;
+	}
+
+	if (interactingL) {}
+
+
+	isRDown = true;
 }
+
 void ClickableManager::HandleRUp(int mouseX, int mouseY)
 {
+	if (isLDown)
+	{
 
+	}
+
+	if (isRDown)
+	{
+		if (interactingR)
+		{
+			if (interactingR == curOver)
+			{
+				interactingR->OnRComplete();
+			}
+			else	/*(interacting != curOver)*/
+			{
+				interactingR->OnRCancel();
+			}
+		}
+	}
+	else	// ??
+	{
+
+	}
+
+
+	interactingR = nullptr;
+	isRDown = false;
 }
 
 
-IClickable* ClickableManager::TryGetClickable(GameObjectBase* pGameObject)
+// Manager
+
+IClickable* ClickableManager::GetClickable(GameObjectBase* pGameObject)
 {
-	// TODO
-	return nullptr;
+	IClickable* clickable = dynamic_cast<IClickable*>(pGameObject);
+
+	return clickable;
+}
+
+bool ClickableManager::TryGetClickable(GameObjectBase* pGameObject, IClickable*& pClickable)
+{
+	IClickable* clickable = nullptr;
+
+	if (clickable = dynamic_cast<IClickable*>(pGameObject) /*!= nullptr*/)
+	{
+		pClickable = clickable;
+		return true;
+	}
+	
+	return false;
 }
 
 #pragma endregion

@@ -20,5 +20,14 @@ public:
 
     ~PanelBitmap() override = default;
 
-    // 비트맵 정보 리소스에서 가져오기...
+
+    // Component (Lifecycles)
+    void Awake() override;
+    void Start() override;
+    void Update(float deltaTime) override;
+    void FixedUpdate() override;
+
+    void OnDestroy() override;
+
+    // TODO: 비트맵 정보 리소스에서 가져오기...
 };

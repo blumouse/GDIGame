@@ -3,14 +3,19 @@
 #include "Component.h"
 #include "IClickable.h"
 
-class Panel : public Component, IClickable
+class Panel : public Component, public IClickable
 {
+    friend class PanelBitmap;
     friend class GameManager;
 
 private:
+    // 이것들 조합해서 상태 따라 Draw하면 또 되겠군
     bool isMine = false;
     bool isOpen = false;
     bool isMarked = false;
+
+    int surroundingMine = 0;
+
 
     Panel* pPanel_NW = nullptr;
     Panel* pPanel_N = nullptr;
@@ -22,8 +27,6 @@ private:
     Panel* pPanel_SW = nullptr;
     Panel* pPanel_S = nullptr;
     Panel* pPanel_SE = nullptr;
-
-    int surroundingMine = 0;
 
 public:
     Panel() = delete;
@@ -65,4 +68,5 @@ private:
     void SetMarkedPanel();
 
     void ForceOpenLinkedPanel();
+    void ForceOpenPanel();
 };

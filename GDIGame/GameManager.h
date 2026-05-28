@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Component.h"
+#include "Transform.h"
 
 class Panel;
 
@@ -8,17 +9,19 @@ class GameManager : public Component {
 private:
     static GameManager* instance;
 
-    const int ROW = 50;
-    const int COL = 50;
+    const int ROW = 20;
+    const int COL = 20;
 
-    const int MINE_AMOUNT = 100;
+    const int MINE_AMOUNT = 120;
+
+    const Vector2 panelScale = Vector2(20.0f, 20.0f);
 
     // row * col 크기의 동적 배열
-    Panel** ppPanels;
+    Panel** ppPanels = nullptr;
 
-    int openedPanel;
+    int openedPanel = 0;
 
-    bool isBoom;
+    bool isBoom = false;
 
 
 public:
@@ -52,12 +55,12 @@ public:
     void OnBoom(Panel* pBoomPanel);
     void OnPanelOpened();
 
-    void GameOver();
+    void GameOver(bool isSueccess);
     void FinalizeGame();
 
 
 private:
     void InitPanels(int row, int col);
-    void InitRandomMines(int mineAmount);
-    void InitPanelProps();
+    void InitRandomMines(int row, int col, int mineAmount);
+    void InitPanelProps(int row, int col);
 };
