@@ -18,7 +18,6 @@ private:
     bool isLDown = false;
     bool isRDown = false;
 
-
 public:
     ClickableManager() = delete;
     ClickableManager(GameObjectBase* gameObject) : Component(gameObject) {}
@@ -27,6 +26,9 @@ public:
 
     ClickableManager(const ClickableManager&) = delete;
     ClickableManager& operator=(const ClickableManager&) = delete;
+
+
+    bool isActive = true;
 
 
     // Component (Lifecycles)

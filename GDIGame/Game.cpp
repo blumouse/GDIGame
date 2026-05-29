@@ -216,6 +216,8 @@ void Game::Finalize()
         ppGameObjects = nullptr;
     }
 
+    delete ppBitmapResources;
+
     __super::Destroy();
 }
 
@@ -387,9 +389,23 @@ void Game::OnClose()
 bool Game::LoadResources() 
 {
     // TODO
+    // 원래는 인자로 뭐 문자열 받아서 로드하고 그래야겠지
+    // 로드해주고 핸들(주소) 돌려주고
+    ppBitmapResources = new BitmapInfo* [MAX_BMI_NUM];
+
+    //while (bmiIndex != MAX_BMI_NUM)
+
+    //ppBitmapResources[bmiIndex++] = renderHelp::CreateBitmapInfo(L"./Resource/background.png");
+    ppBitmapResources[bmiIndex++] = renderHelp::CreateBitmapInfo(L"./Resource/mine.png");
+    ppBitmapResources[bmiIndex++] = renderHelp::CreateBitmapInfo(L"./Resource/number.png");
+    ppBitmapResources[bmiIndex++] = renderHelp::CreateBitmapInfo(L"./Resource/face.png");
+
     return true;
 }
 
+Game::BitmapInfo* Game::GetBitmapResource(int index) {
+    return ppBitmapResources[index];
+}
 
 void Game::RegisterObject(GameObjectBase* gameObject)
 {

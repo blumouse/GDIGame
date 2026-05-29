@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "IClickable.h"
 
+#include <iostream>
 
 ClickableManager* ClickableManager::instance = nullptr;
 
@@ -53,10 +54,17 @@ void ClickableManager::OnDestroy()
 
 void ClickableManager::HandleMouseMove(int mouseX, int mouseY)
 {
-	GameObjectBase* go = Game::GetInstance()->GetObjectWithPos(mouseX, mouseY);
-	IClickable* hover = nullptr;
+	if (!isActive)
+		return;
 
-	hover = GetClickable(go);
+
+	GameObjectBase* go = nullptr;
+	if (!Game::GetInstance()->TryGetObjectWithPos(mouseX, mouseY, go))
+		return;
+
+	IClickable* hover = nullptr;
+	if (!TryGetClickable(go, hover))
+		return;
 
 
 	if (curOver == hover)
@@ -91,6 +99,10 @@ void ClickableManager::HandleMouseMove(int mouseX, int mouseY)
 
 void ClickableManager::HandleLDown(int mouseX, int mouseY)
 {
+	if (!isActive)
+		return;
+
+
 	if (isLDown) {}
 		// ??
 
@@ -116,6 +128,10 @@ void ClickableManager::HandleLDown(int mouseX, int mouseY)
 
 void ClickableManager::HandleLUp(int mouseX, int mouseY)
 {
+	if (!isActive)
+		return;
+
+
 	if (isRDown)
 	{
 
@@ -147,6 +163,10 @@ void ClickableManager::HandleLUp(int mouseX, int mouseY)
 
 void ClickableManager::HandleRDown(int mouseX, int mouseY)
 {
+	if (!isActive)
+		return;
+
+
 	if (isRDown) {}
 	// ??
 
@@ -172,6 +192,10 @@ void ClickableManager::HandleRDown(int mouseX, int mouseY)
 
 void ClickableManager::HandleRUp(int mouseX, int mouseY)
 {
+	if (!isActive)
+		return;
+
+
 	if (isLDown)
 	{
 
@@ -206,7 +230,17 @@ void ClickableManager::HandleRUp(int mouseX, int mouseY)
 
 IClickable* ClickableManager::GetClickable(GameObjectBase* pGameObject)
 {
-	IClickable* clickable = dynamic_cast<IClickable*>(pGameObject);
+	IClickable* clickable = nullptr;
+	Component** components = pGameObject->GetComponents();
+	int size = pGameObject->GetComponentsSize();
+
+	for (int i = 0; i < size; i++)
+	{
+		clickable = dynamic_cast<IClickable*>(components[i]);
+
+		if (clickable)
+			break;
+	}
 
 	return clickable;
 }
@@ -214,11 +248,18 @@ IClickable* ClickableManager::GetClickable(GameObjectBase* pGameObject)
 bool ClickableManager::TryGetClickable(GameObjectBase* pGameObject, IClickable*& pClickable)
 {
 	IClickable* clickable = nullptr;
+	Component** components = pGameObject->GetComponents();
+	int size = pGameObject->GetComponentsSize();
 
-	if (clickable = dynamic_cast<IClickable*>(pGameObject) /*!= nullptr*/)
+	for (int i = 0; i < size; i++)
 	{
-		pClickable = clickable;
-		return true;
+		clickable = dynamic_cast<IClickable*>(components[i]);
+
+		if (clickable)
+		{
+			pClickable = clickable;
+			return true;
+		}
 	}
 	
 	return false;

@@ -1,7 +1,6 @@
 #pragma once
 #include "NzWndBase.h"
 #include "Utillity.h"
-#include "RenderHelp.h"
 
 class GameTimer;
 class GameObjectBase;
@@ -12,6 +11,7 @@ namespace renderHelp
 {
     class BitmapInfo;
 }
+
 
 class Game : public NzWndBase
 {
@@ -31,6 +31,8 @@ private:
 
     // 이건 걍 좀 강력하게 쓸까
     BitmapInfo** ppBitmapResources = nullptr;
+    const int MAX_BMI_NUM = 20;
+    int bmiIndex = 0;
 
 
     HDC m_hFrontDC = nullptr;
@@ -52,6 +54,9 @@ public:
     bool Initialize();
     void Run();
     void Finalize();
+
+
+    BitmapInfo* GetBitmapResource(int index);
 
 
     void RegisterObject(GameObjectBase* gameObject);

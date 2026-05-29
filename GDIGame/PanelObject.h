@@ -5,11 +5,18 @@
 #include "IDrawable.h"
 #include "Transform.h"
 
+namespace renderHelp
+{
+    class BitmapInfo;
+}
+
 class Panel;
 class PanelBitmap;
 
 class PanelObject : public GameObjectBase, public IDrawable, public Transform
 {
+    using BitmapInfo = renderHelp::BitmapInfo;
+
 private:
     Panel* pPanel = nullptr;
     PanelBitmap* pPanelBitmap = nullptr;

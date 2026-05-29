@@ -3,6 +3,8 @@
 #include "Component.h"
 #include "IClickable.h"
 
+class PanelBitmap;
+
 class Panel : public Component, public IClickable
 {
     friend class PanelBitmap;
@@ -27,6 +29,8 @@ private:
     Panel* pPanel_SW = nullptr;
     Panel* pPanel_S = nullptr;
     Panel* pPanel_SE = nullptr;
+
+    PanelBitmap* panelBitmap = nullptr;
 
 public:
     Panel() = delete;

@@ -12,7 +12,7 @@ private:
     const int ROW = 20;
     const int COL = 20;
 
-    const int MINE_AMOUNT = 120;
+    const int MINE_AMOUNT = 50;
 
     const Vector2 panelScale = Vector2(20.0f, 20.0f);
 

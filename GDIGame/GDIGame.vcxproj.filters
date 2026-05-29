@@ -48,9 +48,6 @@
     <ClCompile Include="GameTimer.cpp">
       <Filter>소스 파일\Origin</Filter>
     </ClCompile>
-    <ClCompile Include="Main.cpp">
-      <Filter>소스 파일\Origin</Filter>
-    </ClCompile>
     <ClCompile Include="MyFirstWndGame.cpp">
       <Filter>소스 파일\Origin</Filter>
     </ClCompile>
@@ -62,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="Utillity.cpp">
       <Filter>소스 파일\Origin</Filter>
-    </ClCompile>
-    <ClCompile Include="Game.cpp">
-      <Filter>소스 파일\Core</Filter>
     </ClCompile>
     <ClCompile Include="MyGameObject.cpp">
       <Filter>소스 파일\Core</Filter>
@@ -86,6 +80,24 @@
     </ClCompile>
     <ClCompile Include="IDrawable.cpp">
       <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>소스 파일\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickableManagerObject.cpp">
+      <Filter>소스 파일\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickableManager.cpp">
+      <Filter>소스 파일\User</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel.cpp">
+      <Filter>소스 파일\User</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelBitmap.cpp">
+      <Filter>소스 파일\User</Filter>
+    </ClCompile>
+    <ClCompile Include="Main.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -149,15 +161,18 @@
     <ClInclude Include="IClickable.h">
       <Filter>헤더 파일\User</Filter>
     </ClInclude>
+    <ClInclude Include="PanelBitmap.h">
+      <Filter>헤더 파일\User</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resource\background.png">
+    <Image Include="Resource\face.png">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="Resource\graybird.png">
+    <Image Include="Resource\mine.png">
       <Filter>리소스 파일</Filter>
     </Image>
-    <Image Include="Resource\redbird.png">
+    <Image Include="Resource\number.png">
       <Filter>리소스 파일</Filter>
     </Image>
   </ItemGroup>

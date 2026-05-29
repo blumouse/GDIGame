@@ -169,9 +169,9 @@
     <ClInclude Include="Utillity.h" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resource\background.png" />
-    <Image Include="Resource\graybird.png" />
-    <Image Include="Resource\redbird.png" />
+    <Image Include="Resource\face.png" />
+    <Image Include="Resource\mine.png" />
+    <Image Include="Resource\number.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

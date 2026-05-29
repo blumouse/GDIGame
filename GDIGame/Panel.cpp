@@ -2,6 +2,9 @@
 #include "GameManager.h"
 
 #include "PanelObject.h"
+#include "PanelBitmap.h"
+
+#include <iostream>
 
 
 #pragma region Lifecycles
@@ -11,7 +14,12 @@ void Panel::Awake() {
 }
 
 void Panel::Start() {
+    PanelObject* panelObject = dynamic_cast<PanelObject*>(pGameObject);
 
+    if (panelObject)
+        panelBitmap = panelObject->GetPanelBitmap();
+
+    panelBitmap->InitPanelInfo(isMine, surroundingMine);
 }
 
 void Panel::Update(float deltaTime) {
@@ -34,36 +42,48 @@ void Panel::OnDestroy() {
 
 void Panel::OnMouseEnter() {
 
+    panelBitmap->SetClickState(Enter);
 }
 
 void Panel::OnMouseExit() {
 
+    panelBitmap->SetClickState(Exit);
 }
 
 
 void Panel::OnLDown() {
 
+    panelBitmap->SetClickState(LDown);
 }
 
 void Panel::OnLComplete() {
 
+    panelBitmap->SetClickState(LComplete);
+
+    OpenPanel();
 }
 
 void Panel::OnLCancel() {
 
+    panelBitmap->SetClickState(LCancel);
 }
 
 
 void Panel::OnRDown() {
 
+    panelBitmap->SetClickState(RDown);
 }
 
 void Panel::OnRComplete() {
 
+    panelBitmap->SetClickState(RComplete);
+
+    SetMarkedPanel();
 }
 
 void Panel::OnRCancel() {
 
+    panelBitmap->SetClickState(RCancel);
 }
 
 #pragma endregion
@@ -136,6 +156,8 @@ void Panel::OpenPanel() {
         //    ForceOpenLinkedPanel();
         //}
     }
+
+    panelBitmap->SetPanelInfo(isOpen, isMarked);
 }
 
 void Panel::OpenLinkedPanel() {
@@ -169,6 +191,7 @@ void Panel::OpenLinkedPanel() {
 
 void Panel::SetMarkedPanel() {
     isMarked = !isMarked;
+    panelBitmap->SetPanelInfo(isOpen, isMarked);
 }
 
 void Panel::ForceOpenLinkedPanel() {
