@@ -2,4 +2,4 @@
 
 ---
 
-#### [노션](https://github.com/blumouse/GDIGame)
+#### [노션](https://app.notion.com/p/366c218cfe3980ba9634dd66835abfcb)
