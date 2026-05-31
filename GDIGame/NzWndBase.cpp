@@ -4,7 +4,6 @@
 LRESULT CALLBACK NzWndProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 
-	//[CHECK] #3-Ask NzWndBase의 protected 멤버변수에 접근 가능한 이유는?
 	switch (msg)
 	{
 	case WM_SIZE:
@@ -36,7 +35,7 @@ bool NzWndBase::Create(const wchar_t* className, const wchar_t* windowName, int 
 	WNDCLASSEX wc = {};
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.lpszClassName = className;
-	wc.lpfnWndProc = NzWndProc; // //[CHECK] #5. 윈도우 프로시저(함수)의 포인터 등록
+	wc.lpfnWndProc = NzWndProc;
 
 
 	ATOM classId = 0;
@@ -53,15 +52,14 @@ bool NzWndBase::Create(const wchar_t* className, const wchar_t* windowName, int 
 	RECT rc = { 0, 0, width, height };
 	AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, false);
 
-	//[CHECK] AdjustWindowRect()의 의미는?
-	m_hWnd = CreateWindowEx(NULL, MAKEINTATOM(classId), L"", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT,
+	m_hWnd = CreateWindowEx(NULL, MAKEINTATOM(classId), L"", 
+		WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT,
 		rc.right - rc.left, rc.bottom - rc.top, HWND(), HMENU(), HINSTANCE(), NULL);
 
 	if (NULL == m_hWnd) return false;
 
 	::SetWindowText((HWND)m_hWnd, windowName);
 
-	//[CHECK] #5. SetWindowLongPtr()의 의미는?
 	SetWindowLongPtr((HWND)m_hWnd, GWLP_USERDATA, (LONG_PTR)this);
 
 	ShowWindow((HWND)m_hWnd, SW_SHOW);
