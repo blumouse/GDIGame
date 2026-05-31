@@ -20,18 +20,25 @@ class Game : public NzWndBase
 private:
     static Game* instance;
 
+
     GameObjectBase** ppGameObjects = nullptr;
     int gameObjectsIndex = 0;
-    IDrawable** ppDrawables = nullptr;
+
     Transform** ppTransforms = nullptr;
+
+    #define MAX_LAYER_NUM 5
+    IDrawable** ppDrawableLayers[MAX_LAYER_NUM];
+    //IDrawable** ppDrawables = nullptr;
+
 
     GameTimer* pGameTimer = nullptr;
     float fDeltaTime = 0.0f;
     float fFrameCount = 0.0f;
 
+
     // 이건 걍 좀 강력하게 쓸까
-    BitmapInfo** ppBitmapResources = nullptr;
-    const int MAX_BMI_NUM = 20;
+    #define MAX_BMI_NUM 10
+    BitmapInfo* ppBitmapResources[MAX_BMI_NUM];
     int bmiIndex = 0;
 
 
@@ -60,8 +67,12 @@ public:
 
 
     void RegisterObject(GameObjectBase* gameObject);
-    void RegisterDrawable(IDrawable* drawable);
     void RegisterTransform(Transform* transform);
+
+    void RegisterDrawable(IDrawable* drawable);
+    void RegisterDrawable(IDrawable* drawable, int layer);
+    void QuitDrawable(IDrawable* drawable);
+    void QuitDrawable(IDrawable* drawable, int layer);
 
     void DestroyObject(GameObjectBase* gameObject);
 
@@ -98,19 +109,4 @@ private:
 
     bool LoadResources();
 
-
-private:
-    struct MOUSE_POS
-    {
-        int x = 0;
-        int y = 0;
-
-        bool operator!=(const MOUSE_POS& other) const
-        {
-            return (x != other.x || y != other.y);
-        }
-    };
-
-    BitmapInfo* m_pPlayerBitmapInfo = nullptr;
-    BitmapInfo* m_pEnemyBitmapInfo = nullptr;
 };

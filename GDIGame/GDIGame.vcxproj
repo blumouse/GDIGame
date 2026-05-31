@@ -124,6 +124,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CountUI.cpp" />
+    <ClCompile Include="CountUIBitmap.cpp" />
+    <ClCompile Include="CountUIObject.cpp" />
     <ClCompile Include="ClickableManager.cpp" />
     <ClCompile Include="ClickableManagerObject.cpp" />
     <ClCompile Include="Collider.cpp" />
@@ -146,6 +149,9 @@
     <ClCompile Include="Utillity.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CountUI.h" />
+    <ClInclude Include="CountUIBitmap.h" />
+    <ClInclude Include="CountUIObject.h" />
     <ClInclude Include="ClickableManager.h" />
     <ClInclude Include="ClickableManagerObject.h" />
     <ClInclude Include="Collider.h" />

@@ -91,7 +91,6 @@ public:
     static const int PANEL_BITMAP_SLICE_WIDTH = 20;
     static const int PANEL_BITMAP_SLICE_HEIGHT = 20;
     
-    // TODO: 비트맵 정보 리소스에서 가져오기...
 private:
     void SetAnim(AnimState animState);
     void SetSprite(SpriteState spriteState);

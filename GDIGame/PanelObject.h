@@ -1,6 +1,5 @@
 #pragma once
 
-#include "INC_Windows.h"
 #include "MyGameObject.h"
 #include "IDrawable.h"
 #include "Transform.h"
@@ -20,6 +19,8 @@ class PanelObject : public GameObjectBase, public IDrawable, public Transform
 private:
     Panel* pPanel = nullptr;
     PanelBitmap* pPanelBitmap = nullptr;
+
+    int layer = 0;
 
 public:
     PanelObject();
@@ -42,6 +43,8 @@ public:
 
     // IDrawable
     void Draw(HDC hdc) override;
+    int GetLayer() override;
+    void SetLayer(int layer) override;
 
 
     // Transform

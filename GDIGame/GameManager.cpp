@@ -3,6 +3,7 @@
 
 #include "PanelObject.h"
 #include "Panel.h"
+#include "ClickableManager.h"
 
 #include <cstdlib>
 #include <random>
@@ -32,8 +33,6 @@ void GameManager::Awake()
 
 
 	InitGame(ROW, COL, MINE_AMOUNT);
-
-	std::cout << "awake" << std::endl;
 }
 
 void GameManager::Start()
@@ -80,17 +79,16 @@ void GameManager::OnBoom(Panel* pBoomPanel)
 
 void GameManager::OnPanelOpened()
 {
+	openedPanel++;
 
 	if (ROW * COL - MINE_AMOUNT == openedPanel)
-	{
 		GameOver(true);
-	}
-
 }
 
 void GameManager::GameOver(bool isSueccess)
 {
-	// TODO: 조작불가로 만들어야하지 않나
+	// 대강
+	ClickableManager::GetInstance()->isActive = false;
 
 	if (isSueccess)		// 클리어
 	{
@@ -122,10 +120,9 @@ void GameManager::InitPanels(int row, int col)
 
 	Vector2 wholeScale = Vector2(panelScale.x * col, panelScale.y * row);
 
-	// 1024 * 720 ...?	500 * 600 으로 할래
 	// 20x20 기준 살짝 보정된..
 	Vector2 panelPosMargin 
-		= Vector2(((float)Game::GetInstance()->GetWidth() - wholeScale.x) / 2.0f, ((float)Game::GetInstance()->GetHeight() - wholeScale.y) / 2.0f + 50.0f);
+		= Vector2(((float)Game::GetInstance()->GetWidth() - wholeScale.x) / 2.0f, ((float)Game::GetInstance()->GetHeight() - wholeScale.y) / 2.0f + 25.0f);
 
 	Vector2 rectPos;
 

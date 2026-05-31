@@ -9,10 +9,10 @@ class GameManager : public Component {
 private:
     static GameManager* instance;
 
-    const int ROW = 20;
-    const int COL = 20;
+    const int ROW = 16;
+    const int COL = 16;
 
-    const int MINE_AMOUNT = 50;
+    const int MINE_AMOUNT = 40;
 
     const Vector2 panelScale = Vector2(20.0f, 20.0f);
 

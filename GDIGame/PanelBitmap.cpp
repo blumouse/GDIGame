@@ -1,8 +1,6 @@
 #include "PanelBitmap.h"
 #include "Game.h"
 
-#include <iostream>
-
 
 #pragma region Lifecycles
 
@@ -20,7 +18,6 @@ void PanelBitmap::Start() {
 
 void PanelBitmap::Update(float deltaTime) {
 
-	//std::cout << (int)sprite << std::endl;
 }
 
 void PanelBitmap::FixedUpdate() {

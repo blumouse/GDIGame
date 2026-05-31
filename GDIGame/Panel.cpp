@@ -4,13 +4,14 @@
 #include "PanelObject.h"
 #include "PanelBitmap.h"
 
-#include <iostream>
-
 
 #pragma region Lifecycles
 
 void Panel::Awake() {
-    
+    //PanelObject* panelObject = dynamic_cast<PanelObject*>(pGameObject);
+
+    //if (panelObject)
+    //    panelObject->SetLayer(3);
 }
 
 void Panel::Start() {
@@ -37,7 +38,6 @@ void Panel::OnDestroy() {
 #pragma endregion
 
 
-// TODO: 내부로직 호출하면서.. 여기서 비트맵 상태도 바꿔주는게 낫나?
 #pragma region Clickable
 
 void Panel::OnMouseEnter() {
@@ -59,6 +59,12 @@ void Panel::OnLDown() {
 void Panel::OnLComplete() {
 
     panelBitmap->SetClickState(LComplete);
+
+    if (isOpen)
+    {
+        ForceOpenLinkedPanel();
+        return;
+    }
 
     OpenPanel();
 }
@@ -135,7 +141,9 @@ void Panel::OpenPanel() {
 
     isOpen = true;
 
-    GameManager::GetInstance()->OnPanelOpened();    // 이 안에서 개수로 클리어판정
+
+    panelBitmap->SetPanelInfo(isOpen, isMarked);
+
 
     if (isMine)
     {
@@ -143,21 +151,12 @@ void Panel::OpenPanel() {
         return;
     }
 
+
+    GameManager::GetInstance()->OnPanelOpened();    // 이 안에서 개수로 클리어판정
+
+
     if (surroundingMine == 0)
         OpenLinkedPanel();
-    else            /*(!= 0)*/
-    {
-        // TODO: 열심히 검사.. 
-        // 존재하는 주변 패널 모두 mine && marked || !mine 이면 forceopen
-        //if (true)
-        //{
-
-
-        //    ForceOpenLinkedPanel();
-        //}
-    }
-
-    panelBitmap->SetPanelInfo(isOpen, isMarked);
 }
 
 void Panel::OpenLinkedPanel() {
@@ -196,41 +195,74 @@ void Panel::SetMarkedPanel() {
 
 void Panel::ForceOpenLinkedPanel() {
 
-    if (pPanel_NW && !pPanel_NW->isMine)
-        pPanel_NW->ForceOpenPanel();
-
-    if (pPanel_N && !pPanel_N->isMine)
-        pPanel_N->ForceOpenPanel();
-
-    if (pPanel_NE && !pPanel_NE->isMine)
-        pPanel_NE->ForceOpenPanel();
-
-
-    if (pPanel_W && !pPanel_W->isMine)
-        pPanel_W->ForceOpenPanel();
-
-    if (pPanel_E && !pPanel_E->isMine)
-        pPanel_E->ForceOpenPanel();
-
-
-    if (pPanel_SW && !pPanel_SW->isMine)
-        pPanel_SW->ForceOpenPanel();
-
-    if (pPanel_S && !pPanel_S->isMine)
-        pPanel_S->ForceOpenPanel();
-
-    if (pPanel_SE && !pPanel_SE->isMine)
-        pPanel_SE->ForceOpenPanel();
-}
-
-void Panel::ForceOpenPanel() {
-
-    if (isOpen)
+    if (!isOpen)
         return;
 
-    isOpen = true;
+    if (isMarked)
+        return;
 
-    GameManager::GetInstance()->OnPanelOpened();
+    if (surroundingMine == 0)
+        return;
+
+    int count = 0;
+
+    if (pPanel_NW && pPanel_NW->isMarked)
+        count++;
+
+    if (pPanel_N && pPanel_N->isMarked)
+        count++;
+
+    if (pPanel_NE && pPanel_NE->isMarked)
+        count++;
+
+
+    if (pPanel_W && pPanel_W->isMarked)
+        count++;
+
+    if (pPanel_E && pPanel_E->isMarked)
+        count++;
+
+
+    if (pPanel_SW && pPanel_SW->isMarked)
+        count++;
+
+    if (pPanel_S && pPanel_S->isMarked)
+        count++;
+
+    if (pPanel_SE && pPanel_SE->isMarked)
+        count++;
+
+
+    if (count != surroundingMine)
+        return;
+
+
+
+    if (pPanel_NW && !pPanel_NW->isMarked)
+        pPanel_NW->OpenPanel();
+
+    if (pPanel_N && !pPanel_N->isMarked)
+        pPanel_N->OpenPanel();
+
+    if (pPanel_NE && !pPanel_NE->isMarked)
+        pPanel_NE->OpenPanel();
+
+
+    if (pPanel_W && !pPanel_W->isMarked)
+        pPanel_W->OpenPanel();
+
+    if (pPanel_E && !pPanel_E->isMarked)
+        pPanel_E->OpenPanel();
+
+
+    if (pPanel_SW && !pPanel_SW->isMarked)
+        pPanel_SW->OpenPanel();
+
+    if (pPanel_S && !pPanel_S->isMarked)
+        pPanel_S->OpenPanel();
+
+    if (pPanel_SE && !pPanel_SE->isMarked)
+        pPanel_SE->OpenPanel();
 }
 
 #pragma endregion

@@ -23,22 +23,18 @@ using namespace learning;
 // 아 비트맵도 연결해야됨;
 
 // TODO: 
-// 임시로 걍 콜라이더로 그리기
-// + 이상태로 비트맵 상태지정 일단 다 해놓기 색깔만 바꿔서 구분해
-// 짜잘이 남은 게임로직들 구현하고 테스트
 // 게임오버 시 나.. 아 어쨌든 ui / 버튼같은것들 추가 (여유되면) (팝업 ui같은게.. 되나? 지금구조에서.. 걍 생성을 새로 하면되긴 할듯)
 // 클릭 ux.. 이건 기획부터 이슈네 사실; 기본 할만큼은 해놨어 사실
 
 
 // pch 하나 묶어서 놔둘까?
-// 패널에서 Drawable 구현해보기
-// 로드 리소스 만들기
 // 여유되면 friends로 뺄거도 생각해보기 (주로 Game에서 가져갈거)
 // 이슈; RegisterObject 호출이 유저코드 단으로 나오게 하고싶지 않은데요........
 // 팩토리로 해버려?? 제네릭으로 타입받아서 뉴 되나? 뉴 자체를 숨기기
 
 
 constexpr int MAX_GAME_OBJECT_COUNT = 1000;
+
 
 Game* Game::instance = nullptr;
 
@@ -62,9 +58,9 @@ bool Game::Initialize()
     pGameTimer->Reset();
 
     const wchar_t* className = L"MiniGame";
-    const wchar_t* windowName = L"지뢰찾기";
+    const wchar_t* windowName = L"지뢰 찾기";
 
-    if (false == __super::Create(className, windowName, 500, 600))
+    if (false == __super::Create(className, windowName, 420, 460))
     {
         return false;
     }
@@ -92,17 +88,23 @@ bool Game::Initialize()
 
     // 게임 초기화
     ppGameObjects = new GameObjectBase* [MAX_GAME_OBJECT_COUNT];
-    ppDrawables = new IDrawable* [MAX_GAME_OBJECT_COUNT];
     ppTransforms = new Transform* [MAX_GAME_OBJECT_COUNT];
 
     for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
     {
         ppGameObjects[i] = nullptr;
-        ppDrawables[i] = nullptr;
         ppTransforms[i] = nullptr;
     }
 
     gameObjectsIndex = 0;
+
+    for (int i = 0; i < MAX_LAYER_NUM; i++)
+    {
+        ppDrawableLayers[i] = new IDrawable* [MAX_GAME_OBJECT_COUNT];
+
+        for (int j = 0; j < MAX_GAME_OBJECT_COUNT; j++)
+            ppDrawableLayers[i][j] = nullptr;
+    }
 
 
     // 생성!!
@@ -123,10 +125,6 @@ bool Game::Initialize()
     Start();
     isStarted = true;       // 이후에 생성되는 놈들은 따로 호출해줌
 
-
-    // 이게 먼저 와야겠네 이렇게는 안할거지만
-    //m_pPlayerBitmapInfo = renderHelp::CreateBitmapInfo(L"./Resource/redbird.png");
-    //m_pEnemyBitmapInfo = renderHelp::CreateBitmapInfo(L"./Resource/graybird.png");
 
     return true;
 }
@@ -186,10 +184,13 @@ void Game::Finalize()
         ppTransforms = nullptr;
     }
 
-    if (ppDrawables)
+    for (int i = 0; i < MAX_LAYER_NUM; i++)
     {
-        delete ppDrawables;
-        ppDrawables = nullptr;
+        if (ppDrawableLayers[i])
+        {
+            delete ppDrawableLayers[i];
+            ppDrawableLayers[i] = nullptr;
+        }
     }
 
     if (ppGameObjects)
@@ -200,14 +201,6 @@ void Game::Finalize()
             {
                 ppGameObjects[i]->OnDestroy();
 
-                // 는 오브젝트 소멸자에서 알아서 해주구요~
-                //Component** components = ppGameObjects[i]->GetComponents();
-
-                //for (int j = 0; j < ppGameObjects[i]->GetComponentsSize(); j++)
-                //{
-                //    delete components[j];
-                //}
-
                 delete ppGameObjects[i];
                 ppGameObjects[i] = nullptr;
             }
@@ -216,7 +209,7 @@ void Game::Finalize()
         ppGameObjects = nullptr;
     }
 
-    delete ppBitmapResources;
+    //delete ppBitmapResources;
 
     __super::Destroy();
 }
@@ -241,25 +234,25 @@ void Game::_Update()
 
 void Game::_Render()
 {
-    //Clear the back buffer
-    ::PatBlt(m_hBackDC, 0, 0, m_width, m_height, WHITENESS);
+    HBRUSH hGrayBrush = CreateSolidBrush(RGB(216, 216, 216));
+    HBRUSH hOldBrush = (HBRUSH)SelectObject(m_hBackDC, hGrayBrush);
 
-    //메모리 DC에 그리기
-    //for (int i = 0; i < MAX_GAME_OBJECT_COUNT; ++i)
-    //{
-    //    if (ppGameObjects[i])
-    //    {
-    //        ppGameObjects[i]->Render(m_hBackDC);
-    //    }
-    //}
+    ::PatBlt(m_hBackDC, 0, 0, m_width, m_height, PATCOPY); 
 
-    for (int i = 0; i < gameObjectsIndex; ++i)
+    SelectObject(m_hBackDC, hOldBrush);
+    DeleteObject(hGrayBrush);
+    
+
+    // 0번 레이어가 가장 위
+    for (int i = MAX_LAYER_NUM - 1; i >= 0; i--)
     {
-        if (ppDrawables[i])
+        for (int j = 0; j < gameObjectsIndex; ++j)
         {
-            ppDrawables[i]->Draw(m_hBackDC);
+            if (ppDrawableLayers[i][j])
+                ppDrawableLayers[i][j]->Draw(m_hBackDC);
         }
     }
+
 
     //메모리 DC에 그려진 결과를 실제 DC(m_hFrontDC)로 복사
     BitBlt(m_hFrontDC, 0, 0, m_width, m_height, m_hBackDC, 0, 0, SRCCOPY);
@@ -391,7 +384,7 @@ bool Game::LoadResources()
     // TODO
     // 원래는 인자로 뭐 문자열 받아서 로드하고 그래야겠지
     // 로드해주고 핸들(주소) 돌려주고
-    ppBitmapResources = new BitmapInfo* [MAX_BMI_NUM];
+    //ppBitmapResources = new BitmapInfo* [MAX_BMI_NUM];
 
     //while (bmiIndex != MAX_BMI_NUM)
 
@@ -404,6 +397,9 @@ bool Game::LoadResources()
 }
 
 Game::BitmapInfo* Game::GetBitmapResource(int index) {
+    if (index >= bmiIndex || index < 0)
+        return nullptr;
+
     return ppBitmapResources[index];
 }
 
@@ -438,18 +434,6 @@ void Game::RegisterObject(GameObjectBase* gameObject)
         gameObject->Start();
 }
 
-void Game::RegisterDrawable(IDrawable* drawable)
-{
-    for (int i = 0; i < gameObjectsIndex; i++)
-    {
-        if (ppDrawables[i] == nullptr)
-        {
-            ppDrawables[i] = drawable;
-            break;
-        }
-    }
-}
-
 void Game::RegisterTransform(Transform* transform)
 {
     for (int i = 0; i < gameObjectsIndex; i++)
@@ -463,33 +447,85 @@ void Game::RegisterTransform(Transform* transform)
 }
 
 
-void Game::DestroyObject(GameObjectBase* gameObject) 
+void Game::RegisterDrawable(IDrawable* drawable)
 {
     for (int i = 0; i < gameObjectsIndex; i++)
     {
-        if (ppTransforms[i])
+        if (ppDrawableLayers[0][i] == nullptr)
         {
-            if (ppTransforms[i] == dynamic_cast<Transform*>(gameObject))      // ?? 이거 되나..?
-                ppTransforms[i] = nullptr;              // 그냥 이쪽은 따로 탈퇴시키는게 낫나
+            ppDrawableLayers[0][i] = drawable;
+            break;
         }
+    }
+}
 
-        if (ppDrawables[i])
+void Game::RegisterDrawable(IDrawable* drawable, int layer) 
+{
+    if (layer < 0 || layer > MAX_LAYER_NUM)
+        return;
+
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppDrawableLayers[layer][i] == nullptr)
         {
-            if (ppDrawables[i] == dynamic_cast<IDrawable*>(gameObject))
-                ppDrawables[i] = nullptr;
+            ppDrawableLayers[layer][i] = drawable;
+            break;
         }
+    }
+}
 
-        if (ppGameObjects[i])
+void Game::QuitDrawable(IDrawable* drawable)
+{
+    for (int i = 0; i < MAX_LAYER_NUM; i++)
+    {
+        for (int j = 0; j < gameObjectsIndex; j++)
         {
-            if (ppGameObjects[i] == gameObject)
+            if (ppDrawableLayers[i][j] && ppDrawableLayers[i][j] == drawable)
             {
-                ppGameObjects[i] = nullptr;
-
-                gameObject->OnDestroy();
-                delete gameObject;
-
-                return;
+                ppDrawableLayers[i] = nullptr;
+                break;
             }
+        }
+    }
+}
+
+void Game::QuitDrawable(IDrawable* drawable, int layer) 
+{
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppDrawableLayers[layer][i] && ppDrawableLayers[layer][i] == drawable)
+        {
+            ppDrawableLayers[layer] = nullptr;
+            break;
+        }
+    }
+}
+
+void Game::DestroyObject(GameObjectBase* gameObject) 
+{
+    IDrawable* drawable = dynamic_cast<IDrawable*>(gameObject);
+    if (drawable)
+        QuitDrawable(drawable, drawable->GetLayer());
+
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppTransforms[i] && ppTransforms[i] == dynamic_cast<Transform*>(gameObject))
+        {
+            ppTransforms[i] = nullptr;
+            break;
+        }
+    }
+
+    for (int i = 0; i < gameObjectsIndex; i++)
+    {
+        if (ppGameObjects[i] && ppGameObjects[i] == gameObject)
+        {
+            ppGameObjects[i] = nullptr;
+
+            gameObject->OnDestroy();
+            delete gameObject;
+
+            return;
         }
     }
 
@@ -505,7 +541,10 @@ GameObjectBase* Game::GetObjectWithPos(int mouseX, int mouseY)
     for (int i = 0; i < gameObjectsIndex; i++)
     {
         if (ppTransforms[i] && ppTransforms[i]->IsIntersectPoint(mouseX, mouseY))
+        {
             gameObject = dynamic_cast<GameObjectBase*>(ppTransforms[i]);
+            break;
+        }
     }
 
     return gameObject;

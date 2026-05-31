@@ -55,16 +55,28 @@ void ClickableManager::OnDestroy()
 void ClickableManager::HandleMouseMove(int mouseX, int mouseY)
 {
 	if (!isActive)
+	{
+		if (curOver)
+			curOver->OnMouseExit();
 		return;
+	}
 
 
 	GameObjectBase* go = nullptr;
 	if (!Game::GetInstance()->TryGetObjectWithPos(mouseX, mouseY, go))
+	{
+		if (curOver)
+			curOver->OnMouseExit();
 		return;
+	}
 
 	IClickable* hover = nullptr;
 	if (!TryGetClickable(go, hover))
+	{
+		if (curOver)
+			curOver->OnMouseExit();
 		return;
+	}
 
 
 	if (curOver == hover)
@@ -74,17 +86,17 @@ void ClickableManager::HandleMouseMove(int mouseX, int mouseY)
 	}
 	else /*(curOver != hover)*/
 	{
-		if (interactingL)
-			;
+		//if (interactingL)
+		//	;
 
-		if (interactingR)
-			;
+		//if (interactingR)
+		//	;
 
-		if (isLDown)
-			;
+		//if (isLDown)
+		//	;
 
-		if (isRDown)
-			;
+		//if (isRDown)
+		//	;
 
 
 		if (curOver)
@@ -103,16 +115,16 @@ void ClickableManager::HandleLDown(int mouseX, int mouseY)
 		return;
 
 
-	if (isLDown) {}
-		// ??
+	//if (isLDown) {}
+	//	// ??
 
-	if (interactingL) {}
-		// ??
+	//if (interactingL) {}
+	//	// ??
 
-	if (isRDown) 
-	{
-		// 우클릭 취소 시켜주는걸로 할까?
-	}
+	//if (isRDown) 
+	//{
+	//	// 우클릭 취소 시켜주는걸로 할까?
+	//}
 
 	if (curOver)
 	{
@@ -132,10 +144,8 @@ void ClickableManager::HandleLUp(int mouseX, int mouseY)
 		return;
 
 
-	if (isRDown)
-	{
-
-	}
+	//if (isRDown)
+	//	;
 
 	if (isLDown) 
 	{
@@ -167,16 +177,16 @@ void ClickableManager::HandleRDown(int mouseX, int mouseY)
 		return;
 
 
-	if (isRDown) {}
-	// ??
+	//if (isRDown) {}
+	//// ??
 
-	if (interactingR) {}
-	// ??
+	//if (interactingR) {}
+	//// ??
 
-	if (isLDown)
-	{
+	//if (isLDown)
+	//{
 
-	}
+	//}
 
 	if (curOver)
 	{
@@ -196,10 +206,8 @@ void ClickableManager::HandleRUp(int mouseX, int mouseY)
 		return;
 
 
-	if (isLDown)
-	{
-
-	}
+	//if (isLDown)
+	//	;
 
 	if (isRDown)
 	{

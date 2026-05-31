@@ -14,6 +14,7 @@ PanelObject::PanelObject()
 
 
     Game::GetInstance()->RegisterObject(this);
+	Game::GetInstance()->RegisterDrawable(this, 3);
 }
 
 
@@ -62,11 +63,11 @@ void PanelObject::Draw(HDC hdc)
     blend.SourceConstantAlpha = 255;  // 원본 알파 채널 그대로 사용
     blend.AlphaFormat = AC_SRC_ALPHA;
 
-    const int x = pos.x - scale.x / 2;
-    const int y = pos.y - scale.y / 2;
+    const int x = pos.x - scale.x / 2.0f;
+    const int y = pos.y - scale.y / 2.0f;
 
     const int srcX = 0;
-    int srcY = pPanelBitmap->GetSpriteIndex() * 20;
+    int srcY = pPanelBitmap->GetSpriteIndex() * PanelBitmap::PANEL_BITMAP_SLICE_HEIGHT;
 
     AlphaBlend(hdc, x, y, scale.x, scale.y,
         hBitmapDC, srcX, srcY, PanelBitmap::PANEL_BITMAP_SLICE_WIDTH, PanelBitmap::PANEL_BITMAP_SLICE_HEIGHT, blend);
@@ -74,28 +75,82 @@ void PanelObject::Draw(HDC hdc)
 
     // 여기다가 애니메이션 색 섞기
 
+    COLORREF overlayColor;
+
     switch (pPanelBitmap->GetAnimIndex())
     {
+    default:
     case Idle:
         // 안해
-        break;
+        SelectObject(hBitmapDC, hOldBitmap);
+        DeleteDC(hBitmapDC);
+
+        return;
 
     case Highlighted:
         // 연한 색으로
+        overlayColor = RGB(255, 255, 255);
         break;
 
     case Down:
         // 더 어두운 색으로
-        break;
-
-    default:
+        overlayColor = RGB(160, 160, 160);
         break;
     }
+
+    static struct AnimResource {
+        HDC hDC = NULL;
+        HBITMAP hBmp = NULL;
+        HBITMAP hOldBmp = NULL;
+
+        AnimResource() {
+            HDC hScreenDC = GetDC(NULL);
+            hDC = CreateCompatibleDC(hScreenDC);
+            hBmp = CreateCompatibleBitmap(hScreenDC, 1, 1);
+            hOldBmp = (HBITMAP)SelectObject(hDC, hBmp);
+            ReleaseDC(NULL, hScreenDC);
+        }
+
+        ~AnimResource() {
+            if (hDC) {
+                SelectObject(hDC, hOldBmp);
+                DeleteObject(hBmp);
+                DeleteDC(hDC);
+            }
+        }
+    } animResource;
+
+
+    SetPixel(animResource.hDC, 0, 0, overlayColor);
+
+    blend = { 0 };
+    blend.BlendOp = AC_SRC_OVER;
+    blend.SourceConstantAlpha = 128;
+    blend.AlphaFormat = 0;
+
+    AlphaBlend(hdc, x, y, scale.x, scale.y,
+            animResource.hDC, 0, 0, 1, 1, blend);
 
 
     // 비트맵 핸들 복원
     SelectObject(hBitmapDC, hOldBitmap);
     DeleteDC(hBitmapDC);
+}
+
+int PanelObject::GetLayer() 
+{
+    return layer;
+}
+
+void PanelObject::SetLayer(int layer) 
+{
+    if (layer < 0 || layer > MAX_LAYER_NUM)
+        return;
+
+    Game::GetInstance()->QuitDrawable(this);
+
+    Game::GetInstance()->RegisterDrawable(this, layer);
+    this->layer = layer;
 }
 
 #pragma endregion

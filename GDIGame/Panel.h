@@ -72,5 +72,4 @@ private:
     void SetMarkedPanel();
 
     void ForceOpenLinkedPanel();
-    void ForceOpenPanel();
 };

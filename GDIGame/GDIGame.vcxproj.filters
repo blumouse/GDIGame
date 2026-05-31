@@ -99,6 +99,15 @@
     <ClCompile Include="Main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="CountUIObject.cpp">
+      <Filter>소스 파일\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="CountUI.cpp">
+      <Filter>소스 파일\User</Filter>
+    </ClCompile>
+    <ClCompile Include="CountUIBitmap.cpp">
+      <Filter>소스 파일\User</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Collider.h">
@@ -162,6 +171,15 @@
       <Filter>헤더 파일\User</Filter>
     </ClInclude>
     <ClInclude Include="PanelBitmap.h">
+      <Filter>헤더 파일\User</Filter>
+    </ClInclude>
+    <ClInclude Include="CountUIObject.h">
+      <Filter>헤더 파일\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="CountUI.h">
+      <Filter>헤더 파일\User</Filter>
+    </ClInclude>
+    <ClInclude Include="CountUIBitmap.h">
       <Filter>헤더 파일\User</Filter>
     </ClInclude>
   </ItemGroup>
